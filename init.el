@@ -53,8 +53,8 @@
  ;; Linux-specific
  ((string-equal system-type "gnu/linux")
   (progn
-    (setq elpy-interactive-command (executable-find "python3"))
-    (setq elpy-rpc-python-command elpy-interactive-command)
+    (setq python-shell-interpreter "python3")
+    (setq elpy-rpc-python-command python-shell-interpreter)
     )))
 
 (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
