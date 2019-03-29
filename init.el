@@ -16,6 +16,7 @@
 (defvar myPackages
   '(better-defaults
     ein
+    iedit
     elpy
     flycheck
     magit
@@ -37,6 +38,7 @@
 (global-set-key (kbd "C-c <right>") 'windmove-right)
 (global-set-key (kbd "C-c <up>")    'windmove-up)
 (global-set-key (kbd "C-c <down>")  'windmove-down)
+(global-set-key (kbd "C-;") 'iedit-mode)
 (defun duplicate-line()
   (interactive)
   (move-beginning-of-line 1)
