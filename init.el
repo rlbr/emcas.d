@@ -33,7 +33,10 @@
 ;; BASIC
 (require 'yaml-mode)
 (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
-
+(global-set-key (kbd "C-c <left>")  'windmove-left)
+(global-set-key (kbd "C-c <right>") 'windmove-right)
+(global-set-key (kbd "C-c <up>")    'windmove-up)
+(global-set-key (kbd "C-c <down>")  'windmove-down)
 (require 'recentf)
 (recentf-mode 1)
 (global-set-key (kbd "C-<tab>") 'recentf-open-files)
@@ -44,9 +47,10 @@
  ;; Windows fixes
  ((string-equal system-type "windows-nt")
   (progn
-    (setq insert-directory-program "C:/Program Files/git/usr/bin/ls.exe")
     (defun quote-exe (path)
       (w32-short-file-name path))
+    (setq insert-directory-program "C:/Program Files/git/usr/bin/ls.exe")
+    (setq find-program (quote-exe "C:/Program Files/git/usr/bin/find.exe"))
     (setq python-shell-interpreter (quote-exe (executable-find "python")))
     (setq python-check-command (quote-exe (executable-find "flake8")))
     ))
