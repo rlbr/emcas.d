@@ -20,6 +20,7 @@
     elpy
     flycheck
     magit
+    ssh-config-mode
     ; material-theme
     dracula-theme
     yaml-mode
@@ -32,6 +33,7 @@
       (package-install package)))
       myPackages)
 ;; BASIC
+(add-to-list 'auto-mode-alist '("~/.ssh/config\\'" . ssh-config-mode))
 (require 'yaml-mode)
 (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
 (global-set-key (kbd "C-c <left>")  'windmove-left)
@@ -39,6 +41,7 @@
 (global-set-key (kbd "C-c <up>")    'windmove-up)
 (global-set-key (kbd "C-c <down>")  'windmove-down)
 (global-set-key (kbd "C-;") 'iedit-mode)
+(setq dired-listing-switches "-alh")
 (defun duplicate-line()
   (interactive)
   (move-beginning-of-line 1)
@@ -61,6 +64,10 @@
   (progn
     (defun quote-exe (path)
       (w32-short-file-name path))
+    (defun start-external-shell ()
+      (interactive)
+      (start-process-shell-command (format "cmd(%s)" default-directory) nil "start cmd"))
+    (global-set-key (kbd "C-S-C") 'start-external-shell)
     (setq insert-directory-program "C:/Program Files/git/usr/bin/ls.exe")
     (setq find-program (quote-exe "C:/Program Files/git/usr/bin/find.exe"))
     (setq grep-program (quote-exe "C:/Program Files/git/usr/bin/grep.exe"))
