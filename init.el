@@ -34,6 +34,7 @@
       (package-install package)))
       myPackages)
 ;; BASIC
+(require 'ssh-config-mode)
 (add-to-list 'auto-mode-alist '("~/.ssh/config\\'" . ssh-config-mode))
 (require 'yaml-mode)
 (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
@@ -81,7 +82,7 @@
       (w32-short-file-name path))
     (defun start-external-shell ()
       (interactive)
-      (start-process-shell-command (format "cmd(%s)" default-directory) nil "start cmd"))
+      (start-process-shell-command (format "cmd(%s)" default-directory) nil "start default.bat"))
     (global-set-key (kbd "C-S-C") 'start-external-shell)
     (setq insert-directory-program "C:/Program Files/git/usr/bin/ls.exe")
     (setq find-program (quote-exe "C:/Program Files/git/usr/bin/find.exe"))
