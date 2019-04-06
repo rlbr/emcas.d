@@ -21,6 +21,7 @@
     flycheck
     magit
     ssh-config-mode
+    web-mode
     ; material-theme
     dracula-theme
     yaml-mode
@@ -41,6 +42,16 @@
 (global-set-key (kbd "C-c <up>")    'windmove-up)
 (global-set-key (kbd "C-c <down>")  'windmove-down)
 (global-set-key (kbd "C-;") 'iedit-mode)
+;; Web-mode
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 (setq dired-listing-switches "-alh")
 (defun duplicate-line()
   (interactive)
@@ -125,7 +136,25 @@
     ("274fa62b00d732d093fc3f120aca1b31a6bb484492f31081c1814a858e25c72e" default)))
  '(package-selected-packages
    (quote
-    (python-django django-mode visual-regexp-steroids pcre2el vimrc-mode iedit transient magit dracula-theme py-autopep8 flycheck elpy ein better-defaults))))
+    (
+     python-django
+     django-mode
+     visual-regexp-steroids
+     pcre2el vimrc-mode
+     iedit
+     transient
+     magit
+     dracula-theme
+     py-autopep8
+     flycheck
+     elpy
+     ein
+     better-defaults
+     ssh-config-mode
+     yaml-mode
+     apache-mode
+     web-mode
+     ))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
