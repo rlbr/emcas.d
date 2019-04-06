@@ -37,10 +37,12 @@
 (add-to-list 'auto-mode-alist '("~/.ssh/config\\'" . ssh-config-mode))
 (require 'yaml-mode)
 (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
+;; Window movement
 (global-set-key (kbd "C-c <left>")  'windmove-left)
 (global-set-key (kbd "C-c <right>") 'windmove-right)
 (global-set-key (kbd "C-c <up>")    'windmove-up)
 (global-set-key (kbd "C-c <down>")  'windmove-down)
+
 (global-set-key (kbd "C-;") 'iedit-mode)
 ;; Web-mode
 (require 'web-mode)
@@ -52,6 +54,7 @@
 (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+;; Custom
 (setq dired-listing-switches "-alh")
 (defun duplicate-line()
   (interactive)
@@ -68,7 +71,8 @@
 (global-set-key (kbd "C-<tab>") 'recentf-open-files)
 (global-set-key (kbd "C-x g") 'magit-status)
 (setq inhibit-startup-screen t)
-(setq ls-lisp-use-insert-directory-program t)      ;; use external ls
+;; use external ls
+(setq ls-lisp-use-insert-directory-program t)
 (cond
  ;; Windows fixes
  ((string-equal system-type "windows-nt")
