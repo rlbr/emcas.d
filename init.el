@@ -7,7 +7,7 @@
 
 
 (add-to-list 'package-archives
-       '("melpa" . "https://melpa.org/packages/") t)
+	     '("melpa" . "https://melpa.org/packages/") t)
 
 (package-initialize)
 (when (not package-archive-contents)
@@ -22,22 +22,27 @@
     magit
     ssh-config-mode
     web-mode
-    ; material-theme
     dracula-theme
     yaml-mode
     py-autopep8
     apache-mode
+    js2-mode
+    js2-refactor
+    xref-js2
     visual-regexp-steroids))
 
 (mapc #'(lambda (package)
-    (unless (package-installed-p package)
-      (package-install package)))
+	  (unless (package-installed-p package)
+	    (package-install package)))
       myPackages)
 ;; BASIC
 (require 'ssh-config-mode)
 (add-to-list 'auto-mode-alist '("~/.ssh/config\\'" . ssh-config-mode))
 (require 'yaml-mode)
 (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
+(require 'elpy)
+(global-set-key (kbd "M-<up>") 'elpy-nav-move-line-or-region-up)
+(global-set-key (kbd "M-<down>") 'elpy-nav-move-line-or-region-down)
 ;; Window movement
 (global-set-key (kbd "C-c <left>")  'windmove-left)
 (global-set-key (kbd "C-c <right>") 'windmove-right)
@@ -45,6 +50,27 @@
 (global-set-key (kbd "C-c <down>")  'windmove-down)
 
 (global-set-key (kbd "C-;") 'iedit-mode)
+;; JavaScript
+(require 'js2-mode)
+(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+
+;; Better imenu
+(add-hook 'js2-mode-hook #'js2-imenu-extras-mode)
+(require 'js2-refactor)
+(require 'xref-js2)
+
+(add-hook 'js2-mode-hook #'js2-refactor-mode)
+(js2r-add-keybindings-with-prefix "C-c C-r")
+(define-key js2-mode-map (kbd "C-k") #'js2r-kill)
+
+;; js-mode (which js2 is based on) binds "M-." which conflicts with xref, so
+;; unbind it.
+(define-key js-mode-map (kbd "M-.") nil)
+
+(add-hook 'js2-mode-hook (lambda ()
+			   (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)))
+(define-key js2-mode-map (kbd "C-k") #'js2r-kill)
+
 ;; Web-mode
 (require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
@@ -64,14 +90,14 @@
   (yank)
   (open-line 1)
   (next-line 1)
-  (yank)
-)
+  (yank))
 (global-set-key (kbd "C-c C-d") 'duplicate-line)
 (require 'recentf)
 (recentf-mode 1)
 (global-set-key (kbd "C-<tab>") 'recentf-open-files)
 (global-set-key (kbd "C-x g") 'magit-status)
 (setq inhibit-startup-screen t)
+;; (setq vc-handled-backends nil)
 ;; use external ls
 (setq ls-lisp-use-insert-directory-program t)
 (cond
@@ -102,16 +128,16 @@
 
 ;; --------------------------------------
 
-; (setq inhibit-startup-message t) ;; hide the startup message
-; (load-theme 'material t) ;; load material theme
+					; (setq inhibit-startup-message t) ;; hide the startup message
+					; (load-theme 'material t) ;; load material theme
 (load-theme 'dracula t)
 (global-linum-mode t) ;; enable line numbers globally
 
 ;; PYTHON CONFIGURATION
 ;; --------------------------------------
 (elpy-enable)
-;(debug-on-variable-change 'python-check-command)
-; (elpy-use-ipython)
+					;(debug-on-variable-change 'python-check-command)
+					; (elpy-use-ipython)
 
 ;; use flycheck not flymake with elpy
 (when (require 'flycheck nil t)
@@ -127,8 +153,8 @@
 (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
 					;(setq python-flymake-command "\"c:/Program Files/Python37/Scripts/flake8.exe\"")
 
-;(setq python-check-command "\"c:/Program Files/Python37/Scripts/flake8.exe\"")
-; (setq elpy-rpc-python-command "\"c:/Program Files/Python37/pythonw.exe\" ")
+					;(setq python-check-command "\"c:/Program Files/Python37/Scripts/flake8.exe\"")
+					; (setq elpy-rpc-python-command "\"c:/Program Files/Python37/pythonw.exe\" ")
 (setq elpy-syntax-check-command python-check-command)
 ;; init.el ends here
 (custom-set-variables
@@ -141,25 +167,7 @@
     ("274fa62b00d732d093fc3f120aca1b31a6bb484492f31081c1814a858e25c72e" default)))
  '(package-selected-packages
    (quote
-    (
-     python-django
-     django-mode
-     visual-regexp-steroids
-     pcre2el vimrc-mode
-     iedit
-     transient
-     magit
-     dracula-theme
-     py-autopep8
-     flycheck
-     elpy
-     ein
-     better-defaults
-     ssh-config-mode
-     yaml-mode
-     apache-mode
-     web-mode
-     ))))
+    (python-django django-mode visual-regexp-steroids pcre2el vimrc-mode iedit transient magit dracula-theme py-autopep8 flycheck elpy ein better-defaults ssh-config-mode yaml-mode apache-mode web-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -167,12 +175,12 @@
  ;; If there is more than one, they won't work right.
  '(default ((t (:family "Roboto Mono" :foundry "outline" :slant normal :weight normal :height 113 :width normal)))))
 ;; Monkey patch
-;(defun quote-exe (path)
-;  (if (string-match-p (regexp-quote " ") path)
-;      (shell-quote-argument path)
+					;(defun quote-exe (path)
+					;  (if (string-match-p (regexp-quote " ") path)
+					;      (shell-quote-argument path)
 					;    path))
-;(defun quote-exe (path)
-;  (replace-regexp-in-string " " "\\ " path)
+					;(defun quote-exe (path)
+					;  (replace-regexp-in-string " " "\\ " path)
 
 					;
-;(advice-add 'executable-find :filter-return #'quote-exe)
+					;(advice-add 'executable-find :filter-return #'quote-exe)
