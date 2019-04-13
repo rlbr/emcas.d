@@ -115,7 +115,13 @@
     (setq grep-program (quote-exe "C:/Program Files/git/usr/bin/grep.exe"))
     (setq python-shell-interpreter (quote-exe (executable-find "python")))
     (setq python-check-command (quote-exe (executable-find "flake8")))
+    (setq backup-directory-alist
+	  `((".*" . ,temporary-file-directory)))
+    (setq auto-save-file-name-transforms
+	  `((".*" ,temporary-file-directory t)))
+    (setq delete-by-moving-to-trash t)
     ))
+
  ;; Linux-specific
  ((string-equal system-type "gnu/linux")
   (progn
@@ -128,16 +134,16 @@
 
 ;; --------------------------------------
 
-					; (setq inhibit-startup-message t) ;; hide the startup message
-					; (load-theme 'material t) ;; load material theme
+;; (setq inhibit-startup-message t) ;; hide the startup message
+;; (load-theme 'material t) ;; load material theme
 (load-theme 'dracula t)
 (global-linum-mode t) ;; enable line numbers globally
 
 ;; PYTHON CONFIGURATION
 ;; --------------------------------------
 (elpy-enable)
-					;(debug-on-variable-change 'python-check-command)
-					; (elpy-use-ipython)
+;;(debug-on-variable-change 'python-check-command)
+;; (elpy-use-ipython)
 
 ;; use flycheck not flymake with elpy
 (when (require 'flycheck nil t)
@@ -151,10 +157,10 @@
   (local-set-key (kbd "C-c C-p") 'py-autopep8))
 (add-hook 'python-mode-hook 'python-mode-keys)
 (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
-					;(setq python-flymake-command "\"c:/Program Files/Python37/Scripts/flake8.exe\"")
+;;(setq python-flymake-command "\"c:/Program Files/Python37/Scripts/flake8.exe\"")
 
-					;(setq python-check-command "\"c:/Program Files/Python37/Scripts/flake8.exe\"")
-					; (setq elpy-rpc-python-command "\"c:/Program Files/Python37/pythonw.exe\" ")
+;;(setq python-check-command "\"c:/Program Files/Python37/Scripts/flake8.exe\"")
+;; (setq elpy-rpc-python-command "\"c:/Program Files/Python37/pythonw.exe\" ")
 (setq elpy-syntax-check-command python-check-command)
 ;; init.el ends here
 (custom-set-variables
@@ -175,12 +181,12 @@
  ;; If there is more than one, they won't work right.
  '(default ((t (:family "Roboto Mono" :foundry "outline" :slant normal :weight normal :height 113 :width normal)))))
 ;; Monkey patch
-					;(defun quote-exe (path)
-					;  (if (string-match-p (regexp-quote " ") path)
-					;      (shell-quote-argument path)
-					;    path))
-					;(defun quote-exe (path)
-					;  (replace-regexp-in-string " " "\\ " path)
+;;(defun quote-exe (path)
+;;  (if (string-match-p (regexp-quote " ") path)
+;;      (shell-quote-argument path)
+;;    path))
+;;(defun quote-exe (path)
+;;  (replace-regexp-in-string " " "\\ " path)
 
-					;
-					;(advice-add 'executable-find :filter-return #'quote-exe)
+;;
+;;(advice-add 'executable-find :filter-return #'quote-exe)
