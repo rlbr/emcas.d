@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: if __name__ == "__main__"
+# key: ifnm
+# group Idioms
+# --
+if __name__ == "__main__":
