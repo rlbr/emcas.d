@@ -100,6 +100,10 @@
 ;; (setq vc-handled-backends nil)
 ;; use external ls
 (setq ls-lisp-use-insert-directory-program t)
+(setq backup-directory-alist
+      `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms
+      `((".*" ,temporary-file-directory t)))
 (cond
  ;; Windows fixes
  ((string-equal system-type "windows-nt")
@@ -115,10 +119,6 @@
     (setq grep-program (quote-exe "C:/Program Files/git/usr/bin/grep.exe"))
     (setq python-shell-interpreter (quote-exe (executable-find "python")))
     (setq python-check-command (quote-exe (executable-find "flake8")))
-    (setq backup-directory-alist
-	  `((".*" . ,temporary-file-directory)))
-    (setq auto-save-file-name-transforms
-	  `((".*" ,temporary-file-directory t)))
     (setq delete-by-moving-to-trash t)
     ))
 
