@@ -50,6 +50,10 @@
 (global-set-key (kbd "C-c <down>")  'windmove-down)
 
 (global-set-key (kbd "C-;") 'iedit-mode)
+;; Tramp
+(add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+(add-to-list 'tramp-remote-path "/system/xbin")
+
 ;; JavaScript
 (require 'js2-mode)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
@@ -91,7 +95,7 @@
   (open-line 1)
   (next-line 1)
   (yank))
-(global-set-key (kbd "C-c C-d") 'duplicate-line)
+(global-set-key (kbd "C-c d") 'duplicate-line)
 (require 'recentf)
 (recentf-mode 1)
 (global-set-key (kbd "C-<tab>") 'recentf-open-files)
@@ -127,6 +131,15 @@
   (progn
     (setq python-shell-interpreter "python3")
     (setq elpy-rpc-python-command python-shell-interpreter)
+    (defun get-elpa-package-install-directory (pkg)
+      "Return the install directory of elpa PKG. Return nil if it is not found."
+      (let ((elpa-dir package-user-dir))
+	(when (file-exists-p elpa-dir)
+	  (let* ((pkg-match (concat "\\`" (symbol-name pkg) "-[0-9]+"))
+		 (dir (car (directory-files elpa-dir 'full pkg-match))))
+            (when dir (file-name-as-directory dir))))))
+    (setq vr/command-python
+	  (format "python3 %s" (expand-file-name "regexp.py" (get-elpa-package-install-directory 'visual-regexp-steroids))))
     )))
 
 (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
