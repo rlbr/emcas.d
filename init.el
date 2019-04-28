@@ -85,6 +85,10 @@
 (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+;; visual-regexp-steroids
+(require 'visual-regexp-steroids)
+(define-key global-map (kbd "C-c r") 'vr/select-replace)
+(define-key global-map (kbd "C-c q") 'vr/select-query-replace)
 ;; Custom
 (setq dired-listing-switches "-alh")
 (defun duplicate-line()
