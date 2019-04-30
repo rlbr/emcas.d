@@ -109,10 +109,18 @@
 ;; (setq vc-handled-backends nil)
 ;; use external ls
 (setq ls-lisp-use-insert-directory-program t)
-(setq backup-directory-alist
-      `((".*" . ,temporary-file-directory)))
-(setq auto-save-file-name-transforms
-      `((".*" ,temporary-file-directory t)))
+(let ((backup-dir (concat user-emacs-directory "backup"))
+      (auto-save-dir (concat user-emacs-directory "autosave"))
+      )
+  (if (not (file-directory-p backup-dir))
+      (make-directory backup-dir))
+  (if (not(file-directory-p auto-save-dir))
+      (make-directory auto-save-dir)
+    )
+  (setq backup-directory-alist
+	`((".*" . , backup-dir)))
+  (setq auto-save-file-name-transforms
+	`((".*" , (concat auto-save-dir "/") t))))
 (cond
  ;; Windows fixes
  ((string-equal system-type "windows-nt")
