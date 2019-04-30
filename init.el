@@ -53,6 +53,7 @@
 ;; Tramp
 (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
 (add-to-list 'tramp-remote-path "/system/xbin")
+(add-to-list 'tramp-remote-path "/data/data/com.termux/file/usr/bin")
 
 ;; JavaScript
 (require 'js2-mode)
