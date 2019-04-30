@@ -14,28 +14,34 @@
   (package-refresh-contents))
 
 (defvar myPackages
-  '(better-defaults
+  '(
+    apache-mode
+    better-defaults
+    dracula-theme
     ein
-    iedit
     elpy
     flycheck
-    magit
-    ssh-config-mode
-    web-mode
-    dracula-theme
-    yaml-mode
-    py-autopep8
-    apache-mode
+    iedit
     js2-mode
     js2-refactor
+    magit
+    py-autopep8
+    ssh-config-mode
+    undo-tree
+    visual-regexp-steroids
+    web-mode
     xref-js2
-    visual-regexp-steroids))
+    yaml-mode
+    ))
 
 (mapc #'(lambda (package)
 	  (unless (package-installed-p package)
 	    (package-install package)))
       myPackages)
 ;; BASIC
+(require 'undo-tree)
+(global-undo-tree-mode)
+
 (require 'ssh-config-mode)
 (add-to-list 'auto-mode-alist '("~/.ssh/config\\'" . ssh-config-mode))
 (require 'yaml-mode)
@@ -193,7 +199,7 @@
     ("274fa62b00d732d093fc3f120aca1b31a6bb484492f31081c1814a858e25c72e" default)))
  '(package-selected-packages
    (quote
-    (js2-mode js2-refactor xref-js2 python-django django-mode visual-regexp-steroids pcre2el vimrc-mode iedit transient magit dracula-theme py-autopep8 flycheck elpy ein better-defaults ssh-config-mode yaml-mode apache-mode web-mode))))
+    (js2-mode js2-refactor xref-js2 python-django django-mode visual-regexp-steroids pcre2el vimrc-mode iedit transient magit dracula-theme py-autopep8 flycheck elpy ein better-defaults ssh-config-mode yaml-mode apache-mode web-mode undo-tree))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
