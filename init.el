@@ -184,7 +184,8 @@
 (require 'py-autopep8)
 (defun python-mode-keys ()
   "Modify python-mode local key map"
-  (local-set-key (kbd "C-c C-p") 'py-autopep8))
+  (local-set-key (kbd "C-c C-p") 'py-autopep8)
+  (local-set-key (kbd "C-=") 'elpy-goto-assignment))
 (add-hook 'python-mode-hook 'python-mode-keys)
 (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
 (setq elpy-syntax-check-command python-check-command)
@@ -199,7 +200,7 @@
     ("274fa62b00d732d093fc3f120aca1b31a6bb484492f31081c1814a858e25c72e" default)))
  '(package-selected-packages
    (quote
-    (js2-mode js2-refactor xref-js2 python-django django-mode visual-regexp-steroids pcre2el vimrc-mode iedit transient magit dracula-theme py-autopep8 flycheck elpy ein better-defaults ssh-config-mode yaml-mode apache-mode web-mode undo-tree))))
+    (free-keys org-link-minor-mode js2-mode js2-refactor xref-js2 python-django django-mode visual-regexp-steroids pcre2el vimrc-mode iedit transient magit dracula-theme py-autopep8 flycheck elpy ein better-defaults ssh-config-mode yaml-mode apache-mode web-mode undo-tree))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
