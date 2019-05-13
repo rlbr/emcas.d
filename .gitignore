@@ -1,4 +1,5 @@
 /*
 !/.gitignore
 !/.init.el
+!/custom.el
 !/snippets
