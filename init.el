@@ -2,20 +2,25 @@
 
 ;; INSTALL PACKAGES
 ;; --------------------------------------
+
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file 'noerror)
 
 (require 'package)
 
 
+(add-to-list 'package-archives
+	     '("melpa" . "https://melpa.org/packages/") t)
+
 (package-initialize)
-(unless package-archive-contents
+(when (not package-archive-contents)
   (package-refresh-contents))
-(package-install-selected-packages)
 (mapc #'(lambda (package)
 	  (unless (package-installed-p package)
 	    (package-install package)))
 ;; BASIC
+      package-selected-packages)
+
 (require 'undo-tree)
 (global-undo-tree-mode)
 
