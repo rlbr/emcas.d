@@ -6,38 +6,13 @@
 (require 'package)
 
 
-(add-to-list 'package-archives
-	     '("melpa" . "https://melpa.org/packages/") t)
-
 (package-initialize)
-(when (not package-archive-contents)
+(unless package-archive-contents
   (package-refresh-contents))
-
-(defvar myPackages
-  '(
-    apache-mode
-    better-defaults
-    dracula-theme
-    ein
-    elpy
-    flycheck
-    iedit
-    js2-mode
-    js2-refactor
-    magit
-    py-autopep8
-    ssh-config-mode
-    undo-tree
-    visual-regexp-steroids
-    web-mode
-    xref-js2
-    yaml-mode
-    ))
-
+(package-install-selected-packages)
 (mapc #'(lambda (package)
 	  (unless (package-installed-p package)
 	    (package-install package)))
-      myPackages)
 ;; BASIC
 (require 'undo-tree)
 (global-undo-tree-mode)
