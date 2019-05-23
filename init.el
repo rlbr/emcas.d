@@ -162,13 +162,11 @@
   (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
   (add-hook 'elpy-mode-hook 'flycheck-mode))
 
-;; enable py-autopep8 formatting on save
-(require 'py-autopep8)
+(require 'blacken)
 (defun python-mode-keys ()
   "Modify python-mode local key map"
-  (local-set-key (kbd "C-c C-p") 'py-autopep8)
   (local-set-key (kbd "C-=") 'elpy-goto-assignment))
 (add-hook 'python-mode-hook 'python-mode-keys)
-(add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
+(add-hook 'elpy-mode-hook 'blacken-mode)
 (setq elpy-syntax-check-command python-check-command)
 ;; init.el ends here
