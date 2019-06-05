@@ -125,6 +125,10 @@
     (setq python-shell-interpreter (quote-exe (executable-find "python")))
     (setq python-check-command (quote-exe (executable-find "flake8")))
     (setq delete-by-moving-to-trash t)
+    (defun python-shell-interpreter-refresh ()
+      (interactive)
+      (setq python-shell-interpreter (quote-exe (executable-find "python"))))
+    (add-hook 'python-django-project-root-hook 'python-shell-interpreter-refresh)
     ))
 
  ;; Linux-specific
@@ -169,4 +173,6 @@
 (add-hook 'python-mode-hook 'python-mode-keys)
 (add-hook 'elpy-mode-hook 'blacken-mode)
 (setq elpy-syntax-check-command python-check-command)
+
+
 ;; init.el ends here
