@@ -80,6 +80,11 @@
 (require 'visual-regexp-steroids)
 (define-key global-map (kbd "C-c r") 'vr/select-replace)
 (define-key global-map (kbd "C-c q") 'vr/select-query-replace)
+;; Beancount
+(add-to-list 'load-path "~/.emacs.d/no_repo")
+(require 'beancount)
+(add-to-list 'auto-mode-alist '("\\.beancount\\'" . beancount-mode))
+
 ;; Custom
 (setq dired-listing-switches "-alh")
 (defun duplicate-line()
