@@ -94,6 +94,7 @@
 (require 'recentf)
 (recentf-mode 1)
 (global-set-key (kbd "C-<tab>") 'recentf-open-files)
+(global-set-key (kbd "C-x k") 'kill-this-buffer)
 (global-set-key (kbd "C-x g") 'magit-status)
 (setq inhibit-startup-screen t)
 ;; (setq vc-handled-backends nil)
