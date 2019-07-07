@@ -1,0 +1,201 @@
+* Global
+** Add features/modes
+*** undo-tree
+#+begin_src emacs-lisp
+(require 'undo-tree)
+(global-undo-tree-mode)
+#+end_src
+*** ssh-config-mode
+#+begin_src emacs-lisp
+(require 'ssh-config-mode)
+(add-to-list 'auto-mode-alist '("~/.ssh/config\\'" . ssh-config-mode))
+#+end_src
+*** yaml-mode
+#+begin_src emacs-lisp
+(require 'yaml-mode)
+(add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
+#+end_src
+*** elpy move line up and down globally
+#+begin_src emacs-lisp
+(require 'elpy)
+(global-set-key (kbd "M-<up>") 'elpy-nav-move-line-or-region-up)
+(global-set-key (kbd "M-<down>") 'elpy-nav-move-line-or-region-down)
+(global-set-key (kbd "C-c <left>")  'windmove-left)
+(global-set-key (kbd "C-c <right>") 'windmove-right)
+(global-set-key (kbd "C-c <up>")    'windmove-up)
+(global-set-key (kbd "C-c <down>")  'windmove-down)
+#+end_src
+*** iedit-mode
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-;") 'iedit-mode)
+#+end_src
+*** spellcheck entire buffer
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-!") 'ispell-buffer)
+#+end_src
+*** find/replace
+#+begin_src emacs-lisp
+(require 'visual-regexp-steroids)
+(define-key global-map (kbd "C-c r") 'vr/select-replace)
+(define-key global-map (kbd "C-c q") 'vr/select-query-replace)
+#+end_src
+*** duplicate line function
+#+begin_src emacs-lisp
+(defun duplicate-line()
+  (interactive)
+  (move-beginning-of-line 1)
+  (kill-line)
+  (yank)
+  (open-line 1)
+  (next-line 1)
+  (yank))
+(global-set-key (kbd "C-c d") 'duplicate-line)
+#+end_src
+*** magit
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-x g") 'magit-status)
+#+end_src
+#+begin_src emacs-lisp
+(add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
+#+end_src
+** options
+*** global
+**** recent files
+#+begin_src emacs-lisp
+(require 'recentf)
+(recentf-mode 1)
+(global-set-key (kbd "C-<tab>") 'recentf-open-files)
+#+end_src
+**** backup
+#+begin_src emacs-lisp
+(let ((backup-dir (concat user-emacs-directory "backup"))
+      (auto-save-dir (concat user-emacs-directory "autosave"))
+      )
+  (if (not (file-directory-p backup-dir))
+      (make-directory backup-dir))
+  (if (not(file-directory-p auto-save-dir))
+      (make-directory auto-save-dir)
+    )
+  (setq backup-directory-alist
+	`((".*" . , backup-dir)))
+  (setq auto-save-file-name-transforms
+	`((".*" , (concat auto-save-dir "/") t))))
+#+end_src
+**** kill buffer option
+ #+begin_src emacs-lisp
+(global-set-key (kbd "C-x k") 'kill-this-buffer)
+#+end_src
+**** inhibit start screen
+#+begin_src emacs-lisp
+(setq inhibit-startup-screen t)
+#+end_src
+**** save options
+#+begin_src emacs-lisp
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+#+end_src
+**** theming
+#+begin_src emacs-lisp
+(load-theme 'dracula t)
+#+end_src
+**** line numbers globally
+#+begin_src emacs-lisp
+(global-linum-mode t)
+#+end_src
+*** dired
+#+begin_src emacs-lisp
+(setq ls-lisp-use-insert-directory-program t)
+#+end_src
+#+begin_src emacs-lisp
+(setq dired-listing-switches "-alh")
+#+end_src
+* Tramp configuration
+#+begin_src emacs-lisp
+(add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+(add-to-list 'tramp-remote-path "/system/xbin")
+(add-to-list 'tramp-remote-path "/data/data/com.termux/file/usr/bin")
+#+end_src
+* Web things
+** javascript stuff
+#+begin_src emacs-lisp
+(require 'js2-mode)
+(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+(add-hook 'js2-mode-hook #'js2-imenu-extras-mode)
+(require 'js2-refactor)
+(require 'xref-js2)
+(add-hook 'js2-mode-hook #'js2-refactor-mode)
+(js2r-add-keybindings-with-prefix "C-c C-r")
+(define-key js2-mode-map (kbd "C-k") #'js2r-kill)
+(define-key js-mode-map (kbd "M-.") nil)
+(add-hook 'js2-mode-hook (lambda ()
+			   (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)))
+(define-key js2-mode-map (kbd "C-k") #'js2r-kill)
+#+end_src
+** web mode
+#+begin_src emacs-lisp
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+#+end_src
+* Platform Specific
+#+begin_src emacs-lisp
+(cond
+#+end_src
+** Windows
+#+begin_src emacs-lisp
+ ((string-equal system-type "windows-nt")
+  (progn
+    (defun quote-exe (path)
+      (w32-short-file-name path))
+    (defun start-external-shell ()
+      (interactive)
+      (start-process-shell-command (format "cmd(%s)" default-directory) nil "start default.bat"))
+    (global-set-key (kbd "C-S-C") 'start-external-shell)
+    (setq insert-directory-program "C:/Program Files/git/usr/bin/ls.exe")
+    (setq find-program (quote-exe "C:/Program Files/git/usr/bin/find.exe"))
+    (setq grep-program (quote-exe "C:/Program Files/git/usr/bin/grep.exe"))
+    (setq python-shell-interpreter (quote-exe (executable-find "python")))
+    (setq python-check-command (quote-exe (executable-find "flake8")))
+    (setq delete-by-moving-to-trash t)
+    (defun python-shell-interpreter-refresh ()
+      (interactive)
+      (setq python-shell-interpreter (quote-exe (executable-find "python"))))
+    (add-hook 'python-django-project-root-hook 'python-shell-interpreter-refresh)
+    ))
+ #+end_src
+** Linux
+ #+begin_src emacs-lisp
+ ((string-equal system-type "gnu/linux")
+  (progn
+    (setq python-shell-interpreter "python3")
+    (setq elpy-rpc-python-command python-shell-interpreter)
+    (defun get-elpa-package-install-directory (pkg)
+      "Return the install directory of elpa PKG. Return nil if it is not found."
+      (let ((elpa-dir package-user-dir))
+	(when (file-exists-p elpa-dir)
+	  (let* ((pkg-match (concat "\\`" (symbol-name pkg) "-[0-9]+"))
+		 (dir (car (directory-files elpa-dir 'full pkg-match))))
+            (when dir (file-name-as-directory dir))))))
+    (setq vr/command-python
+	  (format "python3 %s" (expand-file-name "regexp.py" (get-elpa-package-install-directory 'visual-regexp-steroids))))
+    )))
+#+end_src
+* Python
+#+begin_src emacs-lisp
+(elpy-enable)
+(when (require 'flycheck nil t)
+  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+  (add-hook 'elpy-mode-hook 'flycheck-mode))
+(require 'blacken)
+(defun python-mode-keys ()
+  "Modify python-mode local key map"
+  (local-set-key (kbd "C-=") 'elpy-goto-assignment))
+(add-hook 'python-mode-hook 'python-mode-keys)
+(add-hook 'elpy-mode-hook 'blacken-mode)
+(setq elpy-syntax-check-command python-check-command)
+#+end_src
