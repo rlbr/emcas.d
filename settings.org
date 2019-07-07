@@ -36,8 +36,8 @@
 *** find/replace
 #+begin_src emacs-lisp
 (require 'visual-regexp-steroids)
-(define-key global-map (kbd "C-c r") 'vr/select-replace)
-(define-key global-map (kbd "C-c q") 'vr/select-query-replace)
+(define-key global-map (kbd "C-c r") 'vr/replace)
+(define-key global-map (kbd "C-c q") 'vr/query-replace)
 #+end_src
 *** duplicate line function
 #+begin_src emacs-lisp
