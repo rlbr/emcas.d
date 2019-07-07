@@ -58,13 +58,20 @@
 #+begin_src emacs-lisp
 (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
 #+end_src
+*** helm
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "M-x") #'helm-M-x)
+(global-set-key (kbd "C-x r b") #'helm-filtered-bookmarks)
+(global-set-key (kbd "C-x C-f") #'helm-find-files)
+(helm-mode 1)
+#+END_SRC
 ** options
 *** global
-**** recent files
+**** recent
+files
 #+begin_src emacs-lisp
 (require 'recentf)
 (recentf-mode 1)
-(global-set-key (kbd "C-<tab>") 'recentf-open-files)
 #+end_src
 **** backup
 #+begin_src emacs-lisp
@@ -97,10 +104,10 @@
 #+begin_src emacs-lisp
 (load-theme 'dracula t)
 #+end_src
-**** line numbers globally
-#+begin_src emacs-lisp
-(global-linum-mode t)
-#+end_src
+**** bell
+#+BEGIN_SRC emacs-lisp
+(mode-line-bell-mode)
+#+END_SRC
 *** dired
 #+begin_src emacs-lisp
 (setq ls-lisp-use-insert-directory-program t)
