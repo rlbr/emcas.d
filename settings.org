@@ -103,8 +103,8 @@
 **** ivy
 #+BEGIN_SRC emacs-lisp
 (ivy-mode)
+(global-set-key (kbd "C-s") 'swiper)
 #+END_SRC
-
 **** kill-emacs key
 #+BEGIN_SRC emacs-lisp
 (global-set-key (kbd "C-x C-k C-x C-k") 'kill-emacs)
