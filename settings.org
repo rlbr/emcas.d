@@ -20,7 +20,6 @@
 (require 'elpy)
 (global-set-key (kbd "M-<up>") 'elpy-nav-move-line-or-region-up)
 (global-set-key (kbd "M-<down>") 'elpy-nav-move-line-or-region-down)
-
 (global-set-key (kbd "C-c <left>")  'windmove-left)
 (global-set-key (kbd "C-c <right>") 'windmove-right)
 (global-set-key (kbd "C-c <up>")    'windmove-up)
@@ -52,16 +51,13 @@
   (yank))
 (global-set-key (kbd "C-c d") 'duplicate-line)
 #+end_src
-
 *** magit
 #+begin_src emacs-lisp
 (global-set-key (kbd "C-x g") 'magit-status)
 #+end_src
-
 #+begin_src emacs-lisp
 (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
 #+end_src
-
 ** options
 *** global
 **** recent files
@@ -70,7 +66,6 @@
 (recentf-mode 1)
 (global-set-key (kbd "C-<tab>") 'recentf-open-files)
 #+end_src
-
 **** backup
 #+begin_src emacs-lisp
 (let ((backup-dir (concat user-emacs-directory "backup"))
@@ -86,17 +81,13 @@
   (setq auto-save-file-name-transforms
 	`((".*" , (concat auto-save-dir "/") t))))
 #+end_src
-
 **** kill buffer option
  #+begin_src emacs-lisp
 (global-set-key (kbd "C-x k") 'kill-this-buffer)
 #+end_src
-
 **** inhibit start screen
 #+begin_src emacs-lisp
 (setq inhibit-startup-screen t)
-
-
 #+end_src
 **** save options
 #+begin_src emacs-lisp
@@ -104,8 +95,6 @@
 #+end_src
 **** theming
 #+begin_src emacs-lisp
-
-
 (load-theme 'dracula t)
 #+end_src
 **** line numbers globally
@@ -117,7 +106,6 @@
 (setq ls-lisp-use-insert-directory-program t)
 #+end_src
 #+begin_src emacs-lisp
-
 (setq dired-listing-switches "-alh")
 #+end_src
 * Tramp configuration
@@ -129,30 +117,21 @@
 * Web things
 ** javascript stuff
 #+begin_src emacs-lisp
-
 (require 'js2-mode)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-
-
 (add-hook 'js2-mode-hook #'js2-imenu-extras-mode)
 (require 'js2-refactor)
 (require 'xref-js2)
-
 (add-hook 'js2-mode-hook #'js2-refactor-mode)
 (js2r-add-keybindings-with-prefix "C-c C-r")
 (define-key js2-mode-map (kbd "C-k") #'js2r-kill)
-
-
-
 (define-key js-mode-map (kbd "M-.") nil)
-
 (add-hook 'js2-mode-hook (lambda ()
 			   (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)))
 (define-key js2-mode-map (kbd "C-k") #'js2r-kill)
 #+end_src
 ** web mode
 #+begin_src emacs-lisp
-
 (require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
@@ -189,7 +168,6 @@
     (add-hook 'python-django-project-root-hook 'python-shell-interpreter-refresh)
     ))
  #+end_src
-
 ** Linux
  #+begin_src emacs-lisp
  ((string-equal system-type "gnu/linux")
@@ -209,17 +187,10 @@
 #+end_src
 * Python
 #+begin_src emacs-lisp
-
-
 (elpy-enable)
-
-
-
-
 (when (require 'flycheck nil t)
   (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
   (add-hook 'elpy-mode-hook 'flycheck-mode))
-
 (require 'blacken)
 (defun python-mode-keys ()
   "Modify python-mode local key map"
@@ -227,7 +198,4 @@
 (add-hook 'python-mode-hook 'python-mode-keys)
 (add-hook 'elpy-mode-hook 'blacken-mode)
 (setq elpy-syntax-check-command python-check-command)
-
-
-
 #+end_src
