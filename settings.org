@@ -64,7 +64,6 @@
 #+begin_src emacs-lisp
 (require 'recentf)
 (recentf-mode 1)
-(global-set-key (kbd "C-<tab>") 'recentf-open-files)
 #+end_src
 **** backup
 #+begin_src emacs-lisp
@@ -97,10 +96,10 @@
 #+begin_src emacs-lisp
 (load-theme 'dracula t)
 #+end_src
-**** line numbers globally
-#+begin_src emacs-lisp
-(global-linum-mode t)
-#+end_src
+**** bell
+#+BEGIN_SRC emacs-lisp
+(mode-line-bell-mode)
+#+END_SRC
 *** dired
 #+begin_src emacs-lisp
 (setq ls-lisp-use-insert-directory-program t)
