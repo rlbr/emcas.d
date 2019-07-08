@@ -58,6 +58,10 @@
 #+begin_src emacs-lisp
 (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
 #+end_src
+*** filename completion
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C->") 'comint-dynamic-complete-filename)
+#+END_SRC
 ** options
 *** global
 **** recent files
