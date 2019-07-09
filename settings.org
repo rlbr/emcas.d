@@ -70,6 +70,10 @@
  try-expand-all-abbrevs try-expand-list try-expand-line
  try-complete-lisp-symbol-partially try-complete-lisp-symbol))
 #+END_SRC
+*** window numbering mode
+#+BEGIN_SRC emacs-lisp
+(window-numbering-mode)
+#+END_SRC
 ** options
 *** global
 **** recent files
