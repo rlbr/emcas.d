@@ -129,6 +129,10 @@
 #+BEGIN_SRC emacs-lisp
 (global-display-line-numbers-mode)
 #+END_SRC
+**** enable commands
+#+BEGIN_SRC emacs-lisp
+(put 'downcase-region 'disabled nil)
+#+END_SRC
 *** dired
 #+begin_src emacs-lisp
 (setq ls-lisp-use-insert-directory-program t)
