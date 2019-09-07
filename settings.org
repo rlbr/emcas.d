@@ -193,10 +193,27 @@
 (setq dired-listing-switches "-alh")
 #+end_src
 * Tramp configuration
+** Android
 #+begin_src emacs-lisp
-(add-to-list 'tramp-remote-path 'tramp-own-remote-path)
-(add-to-list 'tramp-remote-path "/system/xbin")
-(add-to-list 'tramp-remote-path "/data/data/com.termux/file/usr/bin")
+(let
+    (
+     (default-directory "/data/data/com.termux/files/")
+     )
+  (add-to-list 'tramp-connection-properties
+	       (list
+		"/ssh:termux.*"
+		"tmpdir" (expand-file-name "temp/")
+		"remote-shell" (expand-file-name "usr/bin/sh")
+		"remote path" (append (mapcar 'expand-file-name '(
+								  "home/.local/bin"
+								  "usr/bin"
+								  "usr/bin/applets"
+								  ))
+				      '("/sbin"
+					"/vendor/bin"
+					"/system/sbin"
+					"/system/bin"
+					"/system/xbin")))))
 #+end_src
 * Web things
 ** javascript stuff
