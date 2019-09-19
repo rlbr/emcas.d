@@ -1,347 +1,40 @@
-* Global
-** Add features/modes
-*** ibuffer-mode
+* Editing
+* Unix buffer things
+** Platform fixes
+** Key bindings
+** Custom features/Monkey patches
+* Major modes
+** Java
+** JavaScript
+** Python
+*** Platform specific
 #+BEGIN_SRC emacs-lisp
-(require 'ibuffer-vc)
-(add-hook 'ibuffer-mode-hook (lambda ()
-			       (ibuffer-vc-set-filter-groups-by-vc-root)))
-
-(global-set-key (kbd "C-x C-b") 'ibuffer)
-;; Use human readable Size column instead of original one
-(define-ibuffer-column size-h
-  (:name "Size" ;; :inline t
-	 )
-  (cond
-   ((> (buffer-size) 1000000) (format "%7.1fM" (/ (buffer-size) 1000000.0)))
-   ((> (buffer-size) 100000) (format "%7.0fk" (/ (buffer-size) 1000.0)))
-   ((> (buffer-size) 1000) (format "%7.1fk" (/ (buffer-size) 1000.0)))
-   (t (format "%8d" (buffer-size)))))
-
-;; Modify the default ibuffer-formats
-(setq ibuffer-formats
-      '((mark modified read-only " "
-	      (name 18 18 :left :elide)
-	      " "
-	      (size-h 9 -1 :right)
-	      " "
-	      (mode 16 16 :left :elide)
-	      " "
-	      filename-and-process)))
-#+END_SRC
-*** string-inflection
-#+BEGIN_SRC emacs-lisp
-(require 'string-inflection)
-
-;; C-q C-u is the key bindings similar to Vz Editor.
-(global-set-key (kbd "C-M-,") 'my-string-inflection-cycle-auto)
-
-(defun my-string-inflection-cycle-auto ()
-  "switching by major-mode"
-  (interactive)
-  (cond
-   ;; for emacs-lisp-mode
-   ((eq major-mode 'emacs-lisp-mode)
-    (string-inflection-all-cycle))
-   ;; for python
-   ((eq major-mode 'python-mode)
-    (string-inflection-python-style-cycle))
-   ;; for java
-   ((eq major-mode 'java-mode)
-    (string-inflection-java-style-cycle))
-   (t
-    ;; default
-    (string-inflection-ruby-style-cycle))))
-#+END_SRC
-*** undo-tree
-#+begin_src emacs-lisp
-(require 'undo-tree)
-(global-undo-tree-mode)
-#+end_src
-*** ssh-config-mode
-#+begin_src emacs-lisp
-(require 'ssh-config-mode)
-(add-to-list 'auto-mode-alist '("~/.ssh/config\\'" . ssh-config-mode))
-#+end_src
-*** yaml-mode
-#+begin_src emacs-lisp
-(require 'yaml-mode)
-(add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
-#+end_src
-*** elpy move line up and down globally
-#+begin_src emacs-lisp
-(require 'elpy)
-(global-set-key (kbd "M-<up>") 'elpy-nav-move-line-or-region-up)
-(global-set-key (kbd "M-<down>") 'elpy-nav-move-line-or-region-down)
-(global-set-key (kbd "C-c <left>")  'windmove-left)
-(global-set-key (kbd "C-c <right>") 'windmove-right)
-(global-set-key (kbd "C-c <up>")    'windmove-up)
-(global-set-key (kbd "C-c <down>")  'windmove-down)
-#+end_src
-*** iedit-mode
-#+begin_src emacs-lisp
-(global-set-key (kbd "C-;") 'iedit-mode)
-#+end_src
-*** spellcheck entire buffer
-#+begin_src emacs-lisp
-(global-set-key (kbd "C-!") 'ispell-buffer)
-#+end_src
-*** find/replace
-#+begin_src emacs-lisp
-(require 'visual-regexp-steroids)
-(define-key global-map (kbd "C-c r") 'vr/replace)
-(define-key global-map (kbd "C-c q") 'vr/query-replace)
-#+end_src
-*** duplicate line function
-#+begin_src emacs-lisp
-(defun duplicate-line()
-  (interactive)
-  (move-beginning-of-line 1)
-  (kill-line)
-  (yank)
-  (open-line 1)
-  (next-line 1)
-  (yank))
-(global-set-key (kbd "C-c d") 'duplicate-line)
-#+end_src
-*** magit
-#+begin_src emacs-lisp
-(global-set-key (kbd "C-x g") 'magit-status)
-#+end_src
-#+begin_src emacs-lisp
-(add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
-#+end_src
-*** filename completion
-#+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "C->") 'comint-dynamic-complete-filename)
-#+END_SRC
-*** hippie expand
-#+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "M-/") 'hippie-expand)
-(setq hippie-expand-try-functions-list '(try-expand-dabbrev try-expand-dabbrev-all-buffers try-expand-dabbrev-from-kill
- try-complete-file-name-partially try-complete-file-name
- try-expand-all-abbrevs try-expand-list try-expand-line
- try-complete-lisp-symbol-partially try-complete-lisp-symbol))
-#+END_SRC
-*** window numbering mode
-#+BEGIN_SRC emacs-lisp
-(window-numbering-mode)
-#+END_SRC
-** options
-*** global
-**** recent files
-#+begin_src emacs-lisp
-(require 'recentf)
-(recentf-mode 1)
-#+end_src
-**** backup
-#+begin_src emacs-lisp
-(let ((backup-dir (concat user-emacs-directory "backup"))
-      (auto-save-dir (concat user-emacs-directory "autosave"))
-      )
-  (if (not (file-directory-p backup-dir))
-      (make-directory backup-dir))
-  (if (not(file-directory-p auto-save-dir))
-      (make-directory auto-save-dir)
-    )
-  (setq backup-directory-alist
-	`((".*" . , backup-dir)))
-  (setq auto-save-file-name-transforms
-	`((".*" , (concat auto-save-dir "/") t))))
-#+end_src
-**** kill buffer option
- #+begin_src emacs-lisp
-(global-set-key (kbd "C-x k") 'kill-this-buffer)
-#+end_src
-**** inhibit start screen
-#+begin_src emacs-lisp
-(setq inhibit-startup-screen t)
-#+end_src
-**** save options
-#+begin_src emacs-lisp
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
-#+end_src
-**** theming
-#+begin_src emacs-lisp
-(load-theme 'dracula t)
-#+end_src
-**** bell
-#+BEGIN_SRC emacs-lisp
-(mode-line-bell-mode)
-#+END_SRC
-**** ivy
-#+BEGIN_SRC emacs-lisp
-(ivy-mode)
-(global-set-key (kbd "C-s") 'swiper)
-#+END_SRC
-**** kill-emacs key
-#+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "C-x C-k C-x C-k") 'kill-emacs)
-#+END_SRC
-**** linum
-#+BEGIN_SRC emacs-lisp
-(global-display-line-numbers-mode)
-#+END_SRC
-**** enable commands
-#+BEGIN_SRC emacs-lisp
-(put 'downcase-region 'disabled nil)
-#+END_SRC
-*** dired
-#+begin_src emacs-lisp
-(setq ls-lisp-use-insert-directory-program t)
-#+end_src
-#+begin_src emacs-lisp
-(setq dired-listing-switches "-alh")
-#+end_src
-* Tramp configuration
-** Tramp append plist to connection properties
-#+BEGIN_SRC emacs-lisp
-(require 'kv)
-(defun rlbr/add-config-to-tramp (matches-regexp config-plist)
-  (let ((config-alist (kvplist->alist config-plist)))
-    (dolist (pair config-alist)
-      (let ((config (list
-		     matches-regexp
-		     (car pair)
-		     (cdr pair))))
-	(add-to-list
-	 'tramp-connection-properties
-	 config)))))
-#+END_SRC
-** Android
-#+begin_src emacs-lisp
-(let ((android-config (let ((default-directory "/data/data/com.termux/files"))
-			(list "tmpdir" (expand-file-name "home/temp/")
-			      "remote-shell" (expand-file-name "usr/bin/sh")
-			      "remote-process-environment" (append (list (concat "PREFIX=" default-directory "usr")) tramp-remote-process-environment)
-			      "remote-path" (append (mapcar 'expand-file-name '("home/.local/bin" "usr/bin" "usr/bin/applets")) '("/sbin" "/vendor/bin" "/system/sbin" "/system/bin" "/system/xbin"))))))
-  (rlbr/add-config-to-tramp "/ssh:termux.*:" android-config))
-#+end_src
-* Web things
-** javascript stuff
-#+begin_src emacs-lisp
-(require 'js2-mode)
-(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-(add-hook 'js2-mode-hook #'js2-imenu-extras-mode)
-(require 'js2-refactor)
-(require 'xref-js2)
-(add-hook 'js2-mode-hook #'js2-refactor-mode)
-(js2r-add-keybindings-with-prefix "C-c C-r")
-(define-key js2-mode-map (kbd "C-k") #'js2r-kill)
-(define-key js-mode-map (kbd "M-.") nil)
-(add-hook 'js2-mode-hook (lambda ()
-			   (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)))
-(define-key js2-mode-map (kbd "C-k") #'js2r-kill)
-#+end_src
-** web mode
-#+begin_src emacs-lisp
-(require 'web-mode)
-(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-#+end_src
-* Platform Specific
-#+begin_src emacs-lisp
 (cond
-#+end_src
-** Windows
-#+begin_src emacs-lisp
- ((string-equal system-type "windows-nt")
-  (progn
-    (defun rlbr/quote-exe (path)
-      (w32-short-file-name path))
-    (defun rlbr/start-external-shell ()
-      (interactive)
-      (start-process-shell-command (format "cmd(%s)" default-directory) nil "start default.bat"))
-    (global-set-key (kbd "C-S-C") 'rlbr/start-external-shell)
-    (defun rlbr/start-windows-explorer-here ()
-      (interactive)
-      (start-process-shell-command "explorer" nil
- 				  (format "explorer %s"
- 					  (replace-regexp-in-string "/" (regexp-quote "\\") (expand-file-name default-directory))))
-      )
-    (global-set-key (kbd "C-S-E") 'rlbr/start-windows-explorer-here)
-    (defun rlbr/case-insensitive-match (string1 string2)
-      (apply 'string-equal (mapcar 'downcase (list string1 string2))))
-
-    (defun rlbr/output-matches (output-matches-p exe args)
-      "locate the executable whose output satifies output-matches-p when fed args and return the fullpath"
-      (let
-          (
-           (exec-path exec-path)
-           (output)
-           (bad)
-           (command-output)
-           (current-exe)
-           (failed)
-           )
-        (while (not (or output failed))
-          (setq current-exe (executable-find exe))
-          (if current-exe
-     	  (progn
-     	    (setq command-output (shell-command-to-string (format "%s %s" (rlbr/quote-exe current-exe) args)))
-     	    (if (funcall output-matches-p command-output)
-     		(setq output current-exe)
-     	      (progn
-     		(setq bad (replace-regexp-in-string "/$" "" (file-name-directory current-exe)))
-     		(setq exec-path (seq-filter (lambda (item) (not (rlbr/case-insensitive-match item bad))) exec-path)))))
-     	(setq failed t)))
-        output))
-    (let
-        ((find)
- 	(grep)
- 	(ls))
-      (progn
-        (setq find (rlbr/output-matches (lambda (output) (string-equal ".\n" output)) "find" "-maxdepth 0"))
-        (if find
- 	   (setq find-program (rlbr/quote-exe find)))
-        (setq grep (rlbr/output-matches (lambda (output) (string-match "grep (\\w+ grep)" output)) "grep" "-V"))
-        (if grep
- 	   (setq grep-program (rlbr/quote-exe grep)))
-        (setq ls (rlbr/output-matches (lambda (output) (string-match "ls: .*'\\?/': No such file or directory" output)) "ls" "?/"))
-        (if ls
- 	   (setq insert-directory-program (rlbr/quote-exe ls)))))
-    (setq python-shell-interpreter (rlbr/quote-exe (executable-find "python")))
-    (setq python-check-command (rlbr/quote-exe (executable-find "flake8")))
-    (setq delete-by-moving-to-trash t)
-    (defun python-shell-interpreter-refresh ()
-      (interactive)
-      (setq python-shell-interpreter (rlbr/quote-exe (executable-find "python"))))
-    (add-hook 'python-django-project-root-hook 'python-shell-interpreter-refresh)
-    ))
- #+end_src
-** Linux
- #+begin_src emacs-lisp
  ((string-equal system-type "gnu/linux")
   (progn
-    (setq python-shell-interpreter "python3")
-    (setq elpy-rpc-python-command python-shell-interpreter)
-    (defun get-elpa-package-install-directory (pkg)
-      "Return the install directory of elpa PKG. Return nil if it is not found."
-      (let ((elpa-dir package-user-dir))
-	(when (file-exists-p elpa-dir)
-	  (let* ((pkg-match (concat "\\`" (symbol-name pkg) "-[0-9]+"))
-		 (dir (car (directory-files elpa-dir 'full pkg-match))))
-            (when dir (file-name-as-directory dir))))))
-    (setq vr/command-python
-	  (format "python3 %s" (expand-file-name "regexp.py" (get-elpa-package-install-directory 'visual-regexp-steroids))))
+  (custom-set-variables python-shell-interpreter "python3")
     )))
-#+end_src
-* Python
+#+END_SRC
+*** custom feature
+*** bindings/settings
 #+begin_src emacs-lisp
-(elpy-enable)
-(when (require 'flycheck nil t)
-  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-  (add-hook 'elpy-mode-hook 'flycheck-mode))
-(require 'blacken)
-(defun python-mode-keys ()
-  "Modify python-mode local key map"
-  (local-set-key (kbd "C-=") 'elpy-goto-assignment))
-(add-hook 'python-mode-hook 'python-mode-keys)
-(add-hook 'elpy-mode-hook 'blacken-mode)
-(setq elpy-syntax-check-command python-check-command)
-#+end_src
+  (use-package blacken
+    :hook python-mode)
+  (use-package elpy
+    :bind (("C-=" . elpy-goto-assignment))
+    :config
+    (when (require 'flycheck nil t)
+      (setq elpy-modules (delq 'elpy-module-flymake elpy-modules)))
+    )
+  (use-package python
+    :config
+    (elpy-enable))
+#+END_SRC
+** Tramp
+** Webmode
+* Minor modes/misc
+** Lispy
+#+BEGIN_SRC emacs-lisp
+  (use-package lispy
+    :hook (emacs-lisp-mode))
+#+END_SRC
