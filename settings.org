@@ -9,11 +9,11 @@
 ** Python
 *** Platform specific
 #+BEGIN_SRC emacs-lisp
-(cond
- ((string-equal system-type "gnu/linux")
-  (progn
-  (custom-set-variables python-shell-interpreter "python3")
-    )))
+  (cond
+   ((string-equal system-type "gnu/linux")
+    "python3")
+   ((string-equal system-type "windows-nt")
+    "python.exe"))
 #+END_SRC
 *** custom feature
 *** bindings/settings
@@ -36,5 +36,5 @@
 ** Lispy
 #+BEGIN_SRC emacs-lisp
   (use-package lispy
-    :hook (emacs-lisp-mode))
+    :hook ((emacs-lisp-mode) . lispy-mode))
 #+END_SRC
