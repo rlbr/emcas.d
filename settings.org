@@ -6,6 +6,13 @@
 * Major modes
 ** Java
 ** JavaScript
+** Magit
+#+BEGIN_SRC emacs-lisp
+  (use-package magit
+    :bind (("C-x g" . magit-status)))
+  (use-package git-commit
+    :hook (git-commit-setup . git-commit-turn-on-flyspell))
+#+END_SRC
 ** Python
 *** Platform specific
 #+BEGIN_SRC emacs-lisp
