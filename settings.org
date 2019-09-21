@@ -1,4 +1,14 @@
 * Editing
+** Backup/auto-save
+#+BEGIN_SRC emacs-lisp
+  (let ((backup-dir "~/.emacs.d/backup")
+	(auto-save-dir "~/.emacs.d/autosave"))
+    (if (not (file-directory-p backup-dir))
+	(make-directory backup-dir))
+    (if (not (file-directory-p
+	      auto-save-dir))
+	(make-directory auto-save-dir)))
+#+END_SRC
 ** Hippie expand
 #+BEGIN_SRC emacs-lisp
   (use-package hippie-exp
