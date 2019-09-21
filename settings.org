@@ -84,10 +84,11 @@
 #+END_SRC
 ** Ivy
 #+BEGIN_SRC emacs-lisp
-  (use-package ivy-mode
+  (use-package ivy
     :config
     (use-package swiper
-      :bind ("C-s" . swiper)))
+      :bind ("C-s" . swiper))
+    (ivy-mode))
 #+END_SRC
 ** Kill the things
 *** Buffer
