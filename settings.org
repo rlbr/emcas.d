@@ -1,13 +1,17 @@
 * Editing
+** Hippie expand
+#+BEGIN_SRC emacs-lisp
+  (use-package hippie-exp
+    :bind ("M-/" . hippie-expand))
+#+END_SRC
 ** IEdit mode
 #+BEGIN_SRC emacs-lisp
   (use-package iedit
     :bind ("C-;" . iedit-mode))
 #+END_SRC
-** Hippie expand
+** Line numbers
 #+BEGIN_SRC emacs-lisp
-  (use-package hippie-exp
-    :bind ("M-/" . hippie-expand))
+  (global-display-line-numbers-mode)
 #+END_SRC
 * Unix buffer things
 ** Platform fixes
@@ -77,6 +81,22 @@
 	     (format "%7.1fk" (/ (buffer-size) 1000.0)))
 	    (t
 	     (format "%8d" (buffer-size))))))
+#+END_SRC
+** Ivy
+#+BEGIN_SRC emacs-lisp
+  (use-package ivy-mode
+    :config
+    (use-package swiper
+      :bind ("C-s" . swiper)))
+#+END_SRC
+** Kill the things
+*** Buffer
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-x k") 'kill-this-buffer)
+#+END_SRC
+*** Emacs
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-x C-k C-x C-k") 'kill-emacs)
 #+END_SRC
 ** Lispy
 #+BEGIN_SRC emacs-lisp
