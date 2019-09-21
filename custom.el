@@ -9,6 +9,7 @@
  '(custom-safe-themes
    (quote
     ("274fa62b00d732d093fc3f120aca1b31a6bb484492f31081c1814a858e25c72e" default)))
+ '(delete-by-moving-to-trash t)
  '(dired-listing-switches "-alh")
  '(elpy-eldoc-show-current-function nil)
  '(hippie-expand-try-functions-list
@@ -29,7 +30,7 @@
  '(inhibit-startup-screen t)
  '(package-selected-packages
    (quote
-    (use-package kv lispy ibuffer-vc ag string-inflection tiny powershell diffview ivy-hydra window-numbering php-mode swiper mode-line-bell htmlize cython-mode blacken dired-narrow lua-mode browse-kill-ring clipmon free-keys org-link-minor-mode js2-mode js2-refactor xref-js2 python-django visual-regexp-steroids pcre2el vimrc-mode iedit transient magit dracula-theme flycheck elpy ein better-defaults ssh-config-mode yaml-mode apache-mode web-mode undo-tree)))
+    (ace-window winum spaceline powerline use-package kv lispy ibuffer-vc ag string-inflection tiny powershell diffview ivy-hydra php-mode swiper mode-line-bell htmlize cython-mode blacken dired-narrow lua-mode browse-kill-ring clipmon free-keys org-link-minor-mode js2-mode js2-refactor xref-js2 python-django visual-regexp-steroids pcre2el vimrc-mode iedit transient magit dracula-theme flycheck elpy ein better-defaults ssh-config-mode yaml-mode apache-mode web-mode undo-tree)))
  '(reb-re-syntax (quote string))
  '(tramp-use-ssh-controlmaster-options nil nil (tramp)))
 (custom-set-faces

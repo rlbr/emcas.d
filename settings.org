@@ -1,4 +1,20 @@
 * Editing
+** IEdit mode
+#+BEGIN_SRC emacs-lisp
+  (use-package iedit
+    :bind ("C-;" . iedit-mode))
+#+END_SRC
+** Spellcheck
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-!") 'ispell-buffer)
+#+END_SRC
+** Undo tree
+#+BEGIN_SRC emacs-lisp
+  (use-package undo-tree
+    :config
+    (global-undo-tree-mode))
+#+END_SRC
+* Save/load
 ** Backup/auto-save
 #+BEGIN_SRC emacs-lisp
   (let ((backup-dir "~/.emacs.d/backup")
@@ -9,24 +25,20 @@
 	      auto-save-dir))
 	(make-directory auto-save-dir)))
 #+END_SRC
-** Hippie expand
+** On save
 #+BEGIN_SRC emacs-lisp
-  (use-package hippie-exp
-    :bind ("M-/" . hippie-expand))
+  (add-hook 'before-save-hook 'delete-trailing-whitespace)
 #+END_SRC
-** IEdit mode
+** Recent files mode
 #+BEGIN_SRC emacs-lisp
-  (use-package iedit
-    :bind ("C-;" . iedit-mode))
+  (use-package recentf
+    :config
+    (recentf-mode 1))
 #+END_SRC
-** Line numbers
+* Platform dependant
+** Windows
 #+BEGIN_SRC emacs-lisp
-  (global-display-line-numbers-mode)
 #+END_SRC
-* Unix buffer things
-** Platform fixes
-** Key bindings
-** Custom features/Monkey patches
 * Major modes
 ** Java
 ** JavaScript
@@ -72,11 +84,35 @@
     :mode "\\.yml\\'")
 #+END_SRC
 * Minor modes/misc
+** Kill the things
+*** Buffer
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-x k") 'kill-this-buffer)
+#+END_SRC
+*** Emacs
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-x C-k C-x C-k") 'kill-emacs)
+#+END_SRC
+** Lispy
+#+BEGIN_SRC emacs-lisp
+  (use-package lispy
+    :hook ((emacs-lisp-mode) . lispy-mode))
+#+END_SRC
+* Navigation/autocompletion
+** Ace window
+#+BEGIN_SRC emacs-lisp
+  (use-package ace-window
+    :bind (("M-Q" . ace-window)))
+#+END_SRC
+** Hippie expand
+#+BEGIN_SRC emacs-lisp
+  (use-package hippie-exp
+    :bind ("M-/" . hippie-expand))
+#+END_SRC
 ** IBuffer mode
 #+BEGIN_SRC emacs-lisp
   (use-package ibbufer-vc
     :hook ((ibuffer-mode . ibuffer-vc-set-filter-groups-by-vc-root)))
-
   (use-package ibuffer
     :bind (("C-x C-b" . ibuffer))
     :config
@@ -100,23 +136,15 @@
       :bind ("C-s" . swiper))
     (ivy-mode))
 #+END_SRC
-** Kill the things
-*** Buffer
+* Look and feel
+** Line numbers
 #+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "C-x k") 'kill-this-buffer)
+  (global-display-line-numbers-mode)
 #+END_SRC
-*** Emacs
+** Spaceline
 #+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "C-x C-k C-x C-k") 'kill-emacs)
-#+END_SRC
-** Lispy
-#+BEGIN_SRC emacs-lisp
-  (use-package lispy
-    :hook ((emacs-lisp-mode) . lispy-mode))
-#+END_SRC
-** Window numbering mode
-#+BEGIN_SRC emacs-lisp
-  (use-package window-numbering
+  (use-package spaceline-config
     :config
-    (window-numbering-mode))
+    (spaceline-spacemacs-theme)
+    (winum-mode))
 #+END_SRC
