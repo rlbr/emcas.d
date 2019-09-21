@@ -36,17 +36,15 @@
 *** custom feature
 *** bindings/settings
 #+begin_src emacs-lisp
-  (use-package blacken
-    :hook python-mode)
-  (use-package elpy
-    :bind (("C-=" . elpy-goto-assignment))
-    :config
-    (when (require 'flycheck nil t)
-      (setq elpy-modules (delq 'elpy-module-flymake elpy-modules)))
-    )
   (use-package python
     :config
-    (elpy-enable))
+    (use-package elpy
+      :bind (("C-=" . elpy-goto-assignment))
+      :config (when (require 'flycheck nil t)
+		(setq elpy-modules (delq 'elpy-module-flymake elpy-modules))))
+    (elpy-enable)
+    (blacken-mode))
+#+END_SRC
 ** SSH config mode
 #+BEGIN_SRC emacs-lisp
   (use-package ssh-config-mode
