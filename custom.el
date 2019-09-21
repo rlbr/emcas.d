@@ -7,7 +7,24 @@
  '(custom-safe-themes
    (quote
     ("274fa62b00d732d093fc3f120aca1b31a6bb484492f31081c1814a858e25c72e" default)))
+ '(dired-listing-switches "-alh")
  '(elpy-eldoc-show-current-function nil)
+ '(hippie-expand-try-functions-list
+   (quote
+    (try-expand-dabbrev try-expand-dabbrev-all-buffers try-expand-dabbrev-from-kill try-complete-file-name-partially try-complete-file-name try-expand-all-abbrevs try-expand-list try-expand-line try-complete-lisp-symbol-partially try-complete-lisp-symbol)))
+ '(ibuffer-formats
+   (quote
+    ((mark modified read-only locked " "
+	   (name 18 18 :left :elide)
+	   " "
+	   (size-h 9 -1 :right)
+	   " "
+	   (mode 16 16 :left :elide)
+	   " " filename-and-process)
+     (mark " "
+	   (name 16 -1)
+	   " " filename))))
+ '(inhibit-startup-screen t)
  '(package-selected-packages
    (quote
     (kv lispy ibuffer-vc ag string-inflection tiny powershell diffview ivy-hydra window-numbering php-mode swiper mode-line-bell htmlize cython-mode blacken dired-narrow lua-mode browse-kill-ring clipmon free-keys org-link-minor-mode js2-mode js2-refactor xref-js2 python-django visual-regexp-steroids pcre2el vimrc-mode iedit transient magit dracula-theme flycheck elpy ein better-defaults ssh-config-mode yaml-mode apache-mode web-mode undo-tree)))

@@ -1,4 +1,14 @@
 * Editing
+** IEdit mode
+#+BEGIN_SRC emacs-lisp
+  (use-package iedit
+    :bind ("C-;" . iedit-mode))
+#+END_SRC
+** Hippie expand
+#+BEGIN_SRC emacs-lisp
+  (use-package hippie-exp
+    :bind ("M-/" . hippie-expand))
+#+END_SRC
 * Unix buffer things
 ** Platform fixes
 ** Key bindings
@@ -41,8 +51,34 @@
 ** Tramp
 ** Webmode
 * Minor modes/misc
+** IBuffer mode
+#+BEGIN_SRC emacs-lisp
+  (use-package ibbufer-vc
+    :hook ((ibuffer-mode . ibuffer-vc-set-filter-groups-by-vc-root)))
+
+  (use-package ibuffer
+    :bind (("C-x C-b" . ibuffer))
+    :config
+    (define-ibuffer-column size-h
+      ;; Use human readable Size column instead of original one
+      (:name "Size" :inline t)
+      (cond ((> (buffer-size) 1000000)
+	     (format "%7.1fM" (/ (buffer-size) 1000000.0)))
+	    ((> (buffer-size) 100000)
+	     (format "%7.0fk" (/ (buffer-size) 1000.0)))
+	    ((> (buffer-size) 1000)
+	     (format "%7.1fk" (/ (buffer-size) 1000.0)))
+	    (t
+	     (format "%8d" (buffer-size))))))
+#+END_SRC
 ** Lispy
 #+BEGIN_SRC emacs-lisp
   (use-package lispy
     :hook ((emacs-lisp-mode) . lispy-mode))
+#+END_SRC
+** Window numbering mode
+#+BEGIN_SRC emacs-lisp
+  (use-package window-numbering
+    :config
+    (window-numbering-mode))
 #+END_SRC
