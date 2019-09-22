@@ -38,6 +38,65 @@
 * Platform dependant
 ** Windows
 #+BEGIN_SRC emacs-lisp
+  (when (string-equal system-type "windows-nt")
+    (progn
+      (defun rlbr/quote-exe (path)
+	(w32-short-file-name path))
+      (defun rlbr/start-external-shell ()
+	(interactive)
+	(start-process-shell-command (format "cmd(%s)" default-directory) nil "start default.bat"))
+      (global-set-key (kbd "C-S-C") 'rlbr/start-external-shell)
+      (defun rlbr/start-windows-explorer-here ()
+	(interactive)
+	(start-process-shell-command "explorer" nil (format "explorer %s" (replace-regexp-in-string "/" (regexp-quote "\\") (expand-file-name default-directory)))))
+      (global-set-key (kbd "C-S-E") 'rlbr/start-windows-explorer-here)
+      (defun rlbr/case-insensitive-match (string1 string2)
+	(apply 'string-equal (mapcar 'downcase (list string1 string2))))
+      (defun rlbr/output-matches (output-matches-p exe args)
+	"locate the executable whose output satifies output-matches-p when fed args and return the fullpath"
+	(let ((exec-path exec-path)
+	      (output)
+	      (bad)
+	      (command-output)
+	      (current-exe)
+	      (failed))
+	  (while (not (or output failed))
+	    (setq current-exe
+		  (executable-find exe))
+	    (if current-exe
+		(progn
+		  (setq command-output
+			(shell-command-to-string (format "%s %s" (rlbr/quote-exe current-exe) args)))
+		  (if (funcall output-matches-p command-output)
+		      (setq output current-exe)
+		    (progn
+		      (setq bad
+			    (replace-regexp-in-string "/$" "" (file-name-directory current-exe)))
+		      (setq exec-path
+			    (seq-filter (lambda (item) (not (rlbr/case-insensitive-match item bad))) exec-path)))))
+	      (setq failed t)))
+	  output))
+      (let ((find)
+	    (grep)
+	    (ls))
+	(progn
+	  (setq find
+		(rlbr/output-matches
+		 (lambda (output) (string-equal ".\n" output))
+		 "find" "-maxdepth 0"))
+	  (if find
+	      (setq find-program (rlbr/quote-exe find)))
+	  (setq grep (rlbr/output-matches
+		      (lambda (output) (string-match "grep (\\w+ grep)" output))
+		      "grep" "-V"))
+	  (if grep
+	      (setq grep-program
+		    (rlbr/quote-exe grep)))
+	  (setq ls (rlbr/output-matches
+		    (lambda (output) (string-match "ls: .*'\\?/': No such file or directory" output))
+		    "ls" "?/"))
+	  (if ls
+	      (setq insert-directory-program (rlbr/quote-exe ls)))))))
 #+END_SRC
 * Major modes
 ** Java
