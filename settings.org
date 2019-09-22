@@ -35,7 +35,7 @@
     :config
     (recentf-mode 1))
 #+END_SRC
-* Platform dependant
+* Platform dependent
 ** Windows
 #+BEGIN_SRC emacs-lisp
   (when (string-equal system-type "windows-nt")
@@ -53,7 +53,7 @@
       (defun rlbr/case-insensitive-match (string1 string2)
 	(apply 'string-equal (mapcar 'downcase (list string1 string2))))
       (defun rlbr/output-matches (output-matches-p exe args)
-	"locate the executable whose output satifies output-matches-p when fed args and return the fullpath"
+	"locate the executable whose output satisfies output-matches-p when fed args and return the full-path"
 	(let ((exec-path exec-path)
 	      (output)
 	      (bad)
@@ -221,7 +221,7 @@
   (use-package lispy
     :hook ((emacs-lisp-mode) . lispy-mode))
 #+END_SRC
-* Navigation/autocompletion
+* Navigation/auto-completion
 ** Ace window
 #+BEGIN_SRC emacs-lisp
   (use-package ace-window
