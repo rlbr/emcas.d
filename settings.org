@@ -114,14 +114,14 @@
 	 config)))))
 #+END_SRC
 ** Android
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (let ((android-config (let ((default-directory "/data/data/com.termux/files"))
 			(list "tmpdir" (expand-file-name "home/temp/")
 			      "remote-shell" (expand-file-name "usr/bin/sh")
 			      "remote-process-environment" (append (list (concat "PREFIX=" default-directory "usr")) tramp-remote-process-environment)
 			      "remote-path" (append (mapcar 'expand-file-name '("home/.local/bin" "usr/bin" "usr/bin/applets")) '("/sbin" "/vendor/bin" "/system/sbin" "/system/bin" "/system/xbin"))))))
   (rlbr/add-config-to-tramp "/ssh:termux.*:" android-config))
-#+end_src
+#+END_SRC
 * Major modes
 ** Java
 ** JavaScript
@@ -172,7 +172,7 @@
 #+END_SRC
 *** custom feature
 *** bindings/settings
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package python
     :config
     (use-package elpy
