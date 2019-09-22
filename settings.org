@@ -165,6 +165,18 @@
 #+END_SRC
 ** Tramp
 ** Webmode
+#+BEGIN_SRC emacs-lisp
+  (use-package web-mode
+    :mode
+    (("\\.phtml\\'" . web-mode)
+     ("\\.tpl\\.php\\'" . web-mode)
+     ("\\.[agj]sp\\'" . web-mode)
+     ("\\.as[cp]x\\'" . web-mode)
+     ("\\.erb\\'" . web-mode)
+     ("\\.mustache\\'" . web-mode)
+     ("\\.djhtml\\'" . web-mode)
+     ("\\.html?\\'" . web-mode)))
+#+END_SRC
 ** YAML
 #+BEGIN_SRC emacs-lisp
   (use-package yaml-mode
