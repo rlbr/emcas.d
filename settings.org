@@ -200,6 +200,12 @@
 #+BEGIN_SRC emacs-lisp
   (global-display-line-numbers-mode)
 #+END_SRC
+** Mode line bell
+#+BEGIN_SRC emacs-lisp
+  (use-package mode-line-bell
+    :config
+    (mode-line-bell-mode))
+#+END_SRC
 ** Spaceline
 #+BEGIN_SRC emacs-lisp
   (use-package spaceline-config
