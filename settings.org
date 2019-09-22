@@ -101,26 +101,29 @@
 * Tramp configuration
 ** Tramp append plist to connection properties
 #+BEGIN_SRC emacs-lisp
-(require 'kv)
-(defun rlbr/add-config-to-tramp (matches-regexp config-plist)
-  (let ((config-alist (kvplist->alist config-plist)))
-    (dolist (pair config-alist)
-      (let ((config (list
-		     matches-regexp
-		     (car pair)
-		     (cdr pair))))
-	(add-to-list
-	 'tramp-connection-properties
-	 config)))))
+  (use-package kv
+    :config
+    (defun rlbr/add-config-to-tramp (matches-regexp config-plist)
+      (let ((config-alist (kvplist->alist config-plist)))
+	(dolist (pair config-alist)
+	  (let ((config (list
+			 matches-regexp
+			 (car pair)
+			 (cdr pair))))
+	    (add-to-list
+	     'tramp-connection-properties
+	     config))))))
 #+END_SRC
 ** Android
 #+BEGIN_SRC emacs-lisp
-(let ((android-config (let ((default-directory "/data/data/com.termux/files"))
-			(list "tmpdir" (expand-file-name "home/temp/")
-			      "remote-shell" (expand-file-name "usr/bin/sh")
-			      "remote-process-environment" (append (list (concat "PREFIX=" default-directory "usr")) tramp-remote-process-environment)
-			      "remote-path" (append (mapcar 'expand-file-name '("home/.local/bin" "usr/bin" "usr/bin/applets")) '("/sbin" "/vendor/bin" "/system/sbin" "/system/bin" "/system/xbin"))))))
-  (rlbr/add-config-to-tramp "/ssh:termux.*:" android-config))
+  (use-package tramp
+    :config
+    (let ((android-config (let ((default-directory "/data/data/com.termux/files"))
+					     (list "tmpdir" (expand-file-name "home/temp/")
+						   "remote-shell" (expand-file-name "usr/bin/sh")
+						   "remote-process-environment" (append (list (concat "PREFIX=" default-directory "usr")) tramp-remote-process-environment)
+						   "remote-path" (append (mapcar 'expand-file-name '("home/.local/bin" "usr/bin" "usr/bin/applets")) '("/sbin" "/vendor/bin" "/system/sbin" "/system/bin" "/system/xbin"))))))
+		       (rlbr/add-config-to-tramp "/ssh:termux.*:" android-config)))
 #+END_SRC
 * Major modes
 ** Java
