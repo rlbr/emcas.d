@@ -32,6 +32,7 @@
    (quote
     (ace-window winum spaceline use-package kv lispy ibuffer-vc ag string-inflection tiny powershell diffview ivy-hydra php-mode swiper mode-line-bell htmlize cython-mode blacken dired-narrow lua-mode browse-kill-ring clipmon free-keys org-link-minor-mode js2-mode js2-refactor xref-js2 python-django visual-regexp-steroids pcre2el vimrc-mode iedit transient magit dracula-theme flycheck elpy ein better-defaults ssh-config-mode yaml-mode apache-mode web-mode undo-tree)))
  '(reb-re-syntax (quote string))
+ '(safe-local-variable-values (quote ((project-venv))))
  '(tramp-use-ssh-controlmaster-options nil nil (tramp)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

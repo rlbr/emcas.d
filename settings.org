@@ -174,6 +174,35 @@
     "python.exe"))
 #+END_SRC
 *** custom feature
+#+BEGIN_SRC emacs-lisp
+  (defun rlbr/split-venv-with-number (name-number)
+    "Split a virtualenv name with either a ~ seperating the name and the number, or nothing"
+    (let ((split-result (split-string name-number (regexp-quote "~")))
+	  (ret))
+      (if (= 1 (length split-result))
+	  (progn
+	    (setq ret (car split-result))
+	    (push 0 ret))
+	(progn
+	  (setq ret
+		(string-join
+		 (butlast split-result)
+		 "~"))
+	  (push
+	   (string-to-number
+	    (car (last split-result)))
+	   ret)))
+      ret))
+
+  (defun rlbr/join-venv-with-number (number-name)
+    "Join a list with a name and a number"
+    (let
+	((number (car number-name))
+	 (name (cdr number-name)))
+      (if (= number 0)
+	  (name)
+	(string-join (list name (number-to-string number)) "~"))))
+#+END_SRC
 *** bindings/settings
 #+BEGIN_SRC emacs-lisp
   (use-package python
