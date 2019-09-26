@@ -224,6 +224,19 @@
   (use-package lispy
     :hook ((emacs-lisp-mode) . lispy-mode))
 #+END_SRC
+** Custom custom
+#+BEGIN_SRC emacs-lisp
+  (require 'isearch)
+  (require 'lispy)
+  (defun rlbr/multiline-sexp-with-symbol (symbol-name)
+    (save-excursion
+      (beginning-of-buffer)
+      (search-forward-regexp (isearch-symbol-regexp symbol-name))
+      (backward-up-list)
+      (lispy-alt-multiline)))
+  (advice-add 'custom-save-faces :after (lambda () (rlbr/multiline-sexp-with-symbol "custom-set-faces")))
+  (advice-add 'custom-save-variables :after (lambda () (rlbr/multiline-sexp-with-symbol "custom-set-variables")))
+#+END_SRC
 * Navigation/auto-completion
 ** Ace window
 #+BEGIN_SRC emacs-lisp
