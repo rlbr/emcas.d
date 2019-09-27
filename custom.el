@@ -6,6 +6,7 @@
  '(auto-save-file-name-transforms
    (quote
     ((".*" "~/.emacs.d/autosave/" t))))
+ '(aw-dispatch-when-more-than 1)
  '(backup-directory-alist
    (quote
     ((".*" . "~/.emacs.d/backup"))))
