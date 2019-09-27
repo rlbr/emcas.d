@@ -200,7 +200,7 @@
 	((number (car number-name))
 	 (name (cdr number-name)))
       (if (= number 0)
-	  (name)
+	  name
 	(string-join (list name (number-to-string number)) "~"))))
 #+END_SRC
 *** bindings/settings
