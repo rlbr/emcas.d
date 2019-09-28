@@ -167,11 +167,12 @@
 ** Python
 *** Platform specific
 #+BEGIN_SRC emacs-lisp
-  (cond
-   ((string-equal system-type "gnu/linux")
-    "python3")
-   ((string-equal system-type "windows-nt")
-    "python.exe"))
+  (setq elpy-rpc-python-command
+	(cond
+	 ((string-equal system-type "gnu/linux")
+	  "python3")
+	 ((string-equal system-type "windows-nt")
+	  "pythonw.exe")))
 #+END_SRC
 *** custom feature
 #+BEGIN_SRC emacs-lisp
@@ -206,13 +207,14 @@
 *** bindings/settings
 #+BEGIN_SRC emacs-lisp
   (use-package python
+    :hook ((python-mode . blacken-mode)
+	   (python-mode . pyvenv-mode))
     :config
     (use-package elpy
       :bind (("C-=" . elpy-goto-assignment))
       :config (when (require 'flycheck nil t)
 		(setq elpy-modules (delq 'elpy-module-flymake elpy-modules))))
-    (elpy-enable)
-    (blacken-mode))
+    (elpy-enable))
 #+END_SRC
 ** SSH config mode
 #+BEGIN_SRC emacs-lisp
