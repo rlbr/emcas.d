@@ -20,11 +20,23 @@
     (rlbr/join-venv-with-number venv-partition-name)))
 
 (defun rlbr/setup-python-venv-dirlocals (&optional library-root)
-  "Setup .dir-locals file in library root and tell vc system to ignore .dir-locals file"
-  (let (library-root (if library-root
-			 library-root
-		       (elpy-library-root)))
-    ))
+  "Setup .dir-locals file inf library root and tell vc system to ignore .dir-locals file"
+  (let* ((library-root (if library-root
+			   library-root
+			 (elpy-library-root)))
+	 (default-directory library-root)
+	 (dir-locals-path (expand-file-name
+			   ".dir-locals.el"))
+	 (venv-name (rlbr/get-venv-name
+		     library-root)))
+    (message default-directory)
+    (find-file dir-locals-path)
+    (add-dir-local-variable
+     'python-mode
+     'pyvenv-workon
+     venv-name)
+    (save-buffer)
+    (kill-buffer)))
 
 (defun rlbr/init-python-venv-in-library-root (&optional library-root)
   "If no venv is specified in the library root .dir-locals file, prompt to either create one or use default"
