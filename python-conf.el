@@ -19,8 +19,48 @@
       (setcar venv-partition-name (1+ (apply 'max (mapcar #'car venv-conflicts)))))
     (rlbr/join-venv-with-number venv-partition-name)))
 
+;; We'll save using file-precious-flag, so avoid destroying
+;; symlinks.  (If we're not already visiting the buffer, this is
+;; handled by find-file-visit-truename, above.)
+(defun rlbr/save-buffer-func-to-file (visit-file func args)
+  "Rip off of custom-save-all"
+  (let* ((filename visit-file)
+	 (recentf-exclude (if recentf-mode
+			      (append
+			       `(,(concat "\\`" (regexp-quote (recentf-expand-file-name visit-file)) "\\'")
+				 ,(concat "\\`" (regexp-quote (file-truename (recentf-expand-file-name visit-file))) "\\'"))
+			       recentf-exclude)))
+	 (old-buffer (find-buffer-visiting filename))
+	 old-buffer-name)
+    (with-current-buffer
+	(let ((find-file-visit-truename t))
+	  (or old-buffer
+	      (let ((delay-mode-hooks t))
+		(find-file-noselect filename))))
+      (when old-buffer
+	(setq old-buffer-name
+	      (buffer-file-name))
+	(set-visited-file-name
+	 (file-chase-links filename)))
+      (unless (eq major-mode
+		  'emacs-lisp-mode)
+	(delay-mode-hooks
+	  (emacs-lisp-mode)))
+      (let ((inhibit-read-only t)
+	    (print-length nil)
+	    (print-level nil))
+	(apply func args))
+      (let ((file-precious-flag t))
+	(save-buffer))
+      (if old-buffer
+	  (progn
+	    (set-visited-file-name
+	     old-buffer-name)
+	    (set-buffer-modified-p nil))
+	(kill-buffer (current-buffer))))))
+
 (defun rlbr/setup-python-venv-dirlocals (&optional library-root)
-  "Setup .dir-locals file inf library root and tell vc system to ignore .dir-locals file"
+  "Setup .dir-locals file in library root and tell vc system to ignore .dir-locals file"
   (let* ((library-root (if library-root
 			   library-root
 			 (elpy-library-root)))
@@ -29,14 +69,8 @@
 			   ".dir-locals.el"))
 	 (venv-name (rlbr/get-venv-name
 		     library-root)))
-    (message default-directory)
-    (find-file dir-locals-path)
-    (add-dir-local-variable
-     'python-mode
-     'pyvenv-workon
-     venv-name)
-    (save-buffer)
-    (kill-buffer)))
+    (rlbr/save-buffer-func-to-file dir-locals-path 'add-dir-local-variable
+				   `(python-mode pyvenv-workon ,venv-name))))
 
 (defun rlbr/init-python-venv-in-library-root (&optional library-root)
   "If no venv is specified in the library root .dir-locals file, prompt to either create one or use default"
