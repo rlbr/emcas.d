@@ -14,6 +14,47 @@
     :config
     (global-undo-tree-mode))
 #+END_SRC
+* Added functionality
+** Multiline sexp with symbol
+Jump to symbol, go up list, lispy-multiline. Great for diff-friendly custom
+#+BEGIN_SRC emacs-lisp
+  (require 'isearch)
+  (require 'lispy)
+  (defun rlbr/multiline-sexp-with-symbol (symbol-name)
+    (save-excursion
+      (beginning-of-buffer)
+      (search-forward-regexp (isearch-symbol-regexp symbol-name))
+      (backward-up-list)
+      (lispy-alt-multiline)))
+#+END_SRC
+** Output matches
+Run command for each matching exe and see if output-p is true when fed the command output
+#+BEGIN_SRC emacs-lisp
+  (defun rlbr/output-matches (output-matches-p exe args)
+	"locate the executable whose output satisfies output-matches-p when fed args and return the full-path"
+	(let ((exec-path exec-path)
+	      (output)
+	      (bad)
+	      (command-output)
+	      (current-exe)
+	      (failed))
+	  (while (not (or output failed))
+	    (setq current-exe
+		  (executable-find exe))
+	    (if current-exe
+		(progn
+		  (setq command-output
+			(shell-command-to-string (format "%s %s" (rlbr/quote-exe current-exe) args)))
+		  (if (funcall output-matches-p command-output)
+		      (setq output current-exe)
+		    (progn
+		      (setq bad
+			    (replace-regexp-in-string "/$" "" (file-name-directory current-exe)))
+		      (setq exec-path
+			    (seq-filter (lambda (item) (not (rlbr/case-insensitive-match item bad))) exec-path)))))
+	      (setq failed t)))
+	  output))
+#+END_SRC
 * Save/load
 ** Backup/auto-save
 #+BEGIN_SRC emacs-lisp
@@ -52,30 +93,6 @@
       (global-set-key (kbd "C-S-E") 'rlbr/start-windows-explorer-here)
       (defun rlbr/case-insensitive-match (string1 string2)
 	(apply 'string-equal (mapcar 'downcase (list string1 string2))))
-      (defun rlbr/output-matches (output-matches-p exe args)
-	"locate the executable whose output satisfies output-matches-p when fed args and return the full-path"
-	(let ((exec-path exec-path)
-	      (output)
-	      (bad)
-	      (command-output)
-	      (current-exe)
-	      (failed))
-	  (while (not (or output failed))
-	    (setq current-exe
-		  (executable-find exe))
-	    (if current-exe
-		(progn
-		  (setq command-output
-			(shell-command-to-string (format "%s %s" (rlbr/quote-exe current-exe) args)))
-		  (if (funcall output-matches-p command-output)
-		      (setq output current-exe)
-		    (progn
-		      (setq bad
-			    (replace-regexp-in-string "/$" "" (file-name-directory current-exe)))
-		      (setq exec-path
-			    (seq-filter (lambda (item) (not (rlbr/case-insensitive-match item bad))) exec-path)))))
-	      (setq failed t)))
-	  output))
       (let ((find)
 	    (grep)
 	    (ls))
@@ -257,14 +274,6 @@
 #+END_SRC
 ** Custom custom
 #+BEGIN_SRC emacs-lisp
-  (require 'isearch)
-  (require 'lispy)
-  (defun rlbr/multiline-sexp-with-symbol (symbol-name)
-    (save-excursion
-      (beginning-of-buffer)
-      (search-forward-regexp (isearch-symbol-regexp symbol-name))
-      (backward-up-list)
-      (lispy-alt-multiline)))
   (advice-add 'custom-save-faces :after (lambda () (rlbr/multiline-sexp-with-symbol "custom-set-faces")))
   (advice-add 'custom-save-variables :after (lambda () (rlbr/multiline-sexp-with-symbol "custom-set-variables")))
 #+END_SRC
