@@ -70,7 +70,20 @@
 	 (venv-name (rlbr/get-venv-name
 		     library-root)))
     (rlbr/save-buffer-func-to-file dir-locals-path 'add-dir-local-variable
-				   `(python-mode pyvenv-workon ,venv-name))))
+				   `(python-mode pyvenv-workon ,venv-name))
+    (let* ((vc-root (vc-find-root dir-locals-path ".git"))
+	   (vc-ignore-file (vc-call-backend 'Git 'find-ignore-file vc-root)))
+      (if (apply 'string-equal (mapcar 'directory-file-name (mapcar 'file-truename (list vc-root library-root))))
+	  (progn
+	    (unless (file-exists-p vc-ignore-file)
+	      (with-temp-buffer
+		(write-file vc-ignore-file)))
+	    (vc-ignore ".dir-locals.el"))
+	(when (y-or-n-p (format "Ignore .dir-locals.el in repo '%s' ?" vc-root))
+	  (unless (file-exists-p vc-ignore-file)
+	    (with-temp-buffer
+	      (write-file vc-ignore-file)))
+	  (vc-ignore ".dir-locals.el"))))))
 
 (defun rlbr/init-python-venv-in-library-root (&optional library-root)
   "If no venv is specified in the library root .dir-locals file, prompt to either create one or use default"
