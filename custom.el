@@ -55,7 +55,8 @@
  '(inhibit-startup-screen t)
  '(package-selected-packages
    (quote
-    (ace-window
+    (elmacro
+     ace-window
      winum
      spaceline
      use-package
