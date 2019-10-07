@@ -282,6 +282,7 @@ This handy function is a customized ripoff of custom-save-all
 	(setcar venv-partition-name (1+ (apply 'max (mapcar #'car venv-conflicts)))))
       (rlbr/join-venv-with-number venv-partition-name)))
 
+  (require 'vc)
   (defun rlbr/setup-python-venv-dirlocals (&optional library-root venv-name)
     "Setup .dir-locals file in library root and tell vc system to ignore .dir-locals file"
     (let* ((library-root (if library-root
