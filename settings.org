@@ -55,6 +55,46 @@ Run command for each matching exe and see if output-p is true when fed the comma
 	      (setq failed t)))
 	  output))
 #+END_SRC
+** Save buffer-output to file
+This handy function is a customized ripoff of custom-save-all
+#+BEGIN_SRC emacs-lisp
+  (defun rlbr/save-buffer-func-to-file (visit-file func args)
+    "Rip off of custom-save-all"
+    (let* ((filename visit-file)
+	   (recentf-exclude (if recentf-mode
+				(append
+				 `(,(concat "\\`" (regexp-quote (recentf-expand-file-name visit-file)) "\\'")
+				   ,(concat "\\`" (regexp-quote (file-truename (recentf-expand-file-name visit-file))) "\\'"))
+				 recentf-exclude)))
+	   (old-buffer (find-buffer-visiting filename))
+	   old-buffer-name)
+      (with-current-buffer
+	  (let ((find-file-visit-truename t))
+	    (or old-buffer
+		(let ((delay-mode-hooks t))
+		  (find-file-noselect filename))))
+	(when old-buffer
+	  (setq old-buffer-name
+		(buffer-file-name))
+	  (set-visited-file-name
+	   (file-chase-links filename)))
+	(unless (eq major-mode
+		    'emacs-lisp-mode)
+	  (delay-mode-hooks
+	    (emacs-lisp-mode)))
+	(let ((inhibit-read-only t)
+	      (print-length nil)
+	      (print-level nil))
+	  (apply func args))
+	(let ((file-precious-flag t))
+	  (save-buffer))
+	(if old-buffer
+	    (progn
+	      (set-visited-file-name
+	       old-buffer-name)
+	      (set-buffer-modified-p nil))
+	  (kill-buffer (current-buffer))))))
+#+END_SRC
 * Save/load
 ** Backup/auto-save
 #+BEGIN_SRC emacs-lisp
@@ -220,12 +260,84 @@ Run command for each matching exe and see if output-p is true when fed the comma
       (if (= number 0)
 	  name
 	(string-join (list name (number-to-string number)) "~"))))
+
+  (defun rlbr/get-venv-name (&optional library-root)
+    "Generate venv name based off of the base-name of the library root"
+    (file-name-base
+     (directory-file-name
+      (if library-root
+	  library-root
+	(elpy-library-root)))))
+
+  (defun rlbr/handle-name-conflicts (venv-name)
+    "Deal with potential name conflicts in venv"
+    (let ((venv-conflicts)
+	  (venv-partition-name))
+      (setq venv-partition-name (rlbr/split-venv-with-number venv-name))
+      (setq venv-conflicts
+	    (seq-filter
+	     (lambda (item) (string-equal (cdr item) venv-name))
+	     (mapcar #'rlbr/split-venv-with-number (pyvenv-virtualenv-list))))
+      (when venv-conflicts
+	(setcar venv-partition-name (1+ (apply 'max (mapcar #'car venv-conflicts)))))
+      (rlbr/join-venv-with-number venv-partition-name)))
+
+  (defun rlbr/setup-python-venv-dirlocals (&optional library-root venv-name)
+    "Setup .dir-locals file in library root and tell vc system to ignore .dir-locals file"
+    (let* ((library-root (if library-root
+			     library-root
+			   (elpy-library-root)))
+	   (venv-name (if venv-name venv-name (rlbr/get-venv-name library-root)))
+	   (default-directory library-root)
+	   (dir-locals-path (expand-file-name
+			     ".dir-locals.el")))
+      (rlbr/save-buffer-func-to-file dir-locals-path 'add-dir-local-variable
+				     `(python-mode pyvenv-workon ,venv-name))
+      (let* ((vc-root (vc-find-root dir-locals-path ".git"))
+	     (vc-ignore-file (vc-call-backend 'Git 'find-ignore-file vc-root)))
+	(if (apply 'string-equal (mapcar 'directory-file-name (mapcar 'file-truename (list vc-root library-root))))
+	    (progn
+	      (unless (file-exists-p vc-ignore-file)
+		(with-temp-buffer
+		  (write-file vc-ignore-file)))
+	      (vc-ignore ".dir-locals.el"))
+	  (when (y-or-n-p (format "Ignore .dir-locals.el in repo '%s' ?" vc-root))
+	    (unless (file-exists-p vc-ignore-file)
+	      (with-temp-buffer
+		(write-file vc-ignore-file)))
+	    (vc-ignore ".dir-locals.el"))))))
+
+  (defun rlbr/init-python-venv-in-library-root (&optional library-root)
+    "Prompt to either create one or use default"
+    (let ((venv-name (rlbr/get-venv-name))
+	  (library-root (if library-root
+			    library-root
+			  (elpy-library-root))))
+      (setq venv-name (rlbr/handle-name-conflicts venv-name))
+      (if (y-or-n-p (format "Create venv '%s'?" venv-name))
+	  (pyvenv-create venv-name (read-file-name "Python interpreter to use: "
+						   (file-name-directory (executable-find "python"))
+						   nil nil "python"))
+	(progn
+	  (unless (member "emacs-default-venv" (pyvenv-virtualenv-list))
+	    (pyvenv-create venv-name (read-file-name "Python interpreter to use: "
+						     (file-name-directory (executable-find "python"))
+						     nil nil "python")))
+	  (setq venv-name "emacs-default-venv")))
+      (rlbr/setup-python-venv-dirlocals library-root venv-name)
+      venv-name))
+
+  (defun rlbr/init-venv ()
+    (when (eq major-mode 'python-mode)
+      (unless (or pyvenv-workon (apply 'string-prefix-p (mapcar 'file-truename (list (pyvenv-workon-home) buffer-file-name))))
+	(setq-local pyvenv-workon (rlbr/init-python-venv-in-library-root)))))
 #+END_SRC
 *** bindings/settings
 #+BEGIN_SRC emacs-lisp
   (use-package python
     :hook ((python-mode . blacken-mode)
-	   (python-mode . pyvenv-mode))
+	   (python-mode . pyvenv-mode)
+	   (hack-local-variables . rlbr/init-venv))
     :config
     (use-package elpy
       :bind (("C-=" . elpy-goto-assignment))
