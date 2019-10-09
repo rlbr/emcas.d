@@ -53,6 +53,7 @@
       " "
       filename))))
  '(inhibit-startup-screen t)
+ '(menu-bar-mode nil)
  '(package-selected-packages
    (quote
     (elmacro
@@ -104,6 +105,8 @@
  '(reb-re-syntax (quote string))
  '(safe-local-variable-values
    (quote ((project-venv))))
+ '(scroll-bar-mode nil)
+ '(tool-bar-mode nil)
  '(tramp-use-ssh-controlmaster-options
    nil
    nil
