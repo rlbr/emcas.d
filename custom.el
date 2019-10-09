@@ -57,7 +57,8 @@
  '(menu-bar-mode nil)
  '(package-selected-packages
    (quote
-    (meghanada
+    (autodisass-java-bytecode
+     meghanada
      elmacro
      ace-window
      winum
