@@ -184,6 +184,32 @@ This handy function is a customized ripoff of custom-save-all
 #+END_SRC
 * Major modes
 ** Java
+*** Meghanada
+#+BEGIN_SRC emacs-lisp
+  (use-package autodisass-java-bytecode
+    :defer t)
+
+  (use-package meghanada
+    :defer t
+    :init
+    (add-hook 'java-mode-hook
+	      (lambda ()
+		(meghanada-mode t)
+		(add-hook 'before-save-hook 'meghanada-code-beautify-before-save)))
+
+    :config
+    (setq indent-tabs-mode nil)
+    (setq meghanada-server-remote-debug t)
+    (setq meghanada-javac-xlint "-Xlint:all,-processing")
+    :bind
+    (:map meghanada-mode-map
+	  ("C-S-t" . meghanada-switch-testcase)
+	  ("M-RET" . meghanada-local-variable)
+	  ("M-r" . meghanada-reference)
+	  ("M-t" . meghanada-typeinfo))
+    :commands
+    (meghanada-mode))
+#+END_SRC
 ** JavaScript
 #+BEGIN_SRC emacs-lisp
   (use-package js2-mode
