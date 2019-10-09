@@ -55,7 +55,8 @@
  '(inhibit-startup-screen t)
  '(package-selected-packages
    (quote
-    (elmacro
+    (meghanada
+     elmacro
      ace-window
      winum
      spaceline
