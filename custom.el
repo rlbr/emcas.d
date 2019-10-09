@@ -53,6 +53,7 @@
       " "
       filename))))
  '(inhibit-startup-screen t)
+ '(menu-bar-mode nil)
  '(package-selected-packages
    (quote
     (meghanada
