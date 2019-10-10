@@ -308,6 +308,9 @@ This handy function is a customized ripoff of custom-save-all
 		(write-file vc-ignore-file)))
 	    (vc-ignore ".dir-locals.el"))))))
 
+  (defun rlbr/get-python-executable ()
+    (read-file-name "Python interpreter to use: " (file-name-directory (executable-find "python")) nil nil "python"))
+
   (defun rlbr/init-python-venv-in-library-root (&optional library-root)
     "Prompt to either create one or use default"
     (let ((venv-name (rlbr/get-venv-name))
@@ -316,22 +319,36 @@ This handy function is a customized ripoff of custom-save-all
 			  (elpy-library-root))))
       (setq venv-name (rlbr/handle-name-conflicts venv-name))
       (if (y-or-n-p (format "Create venv '%s'?" venv-name))
-	  (pyvenv-create venv-name (read-file-name "Python interpreter to use: "
-						   (file-name-directory (executable-find "python"))
-						   nil nil "python"))
+	  (pyvenv-create venv-name (rlbr/get-python-executable))
 	(progn
 	  (unless (member "emacs-default-venv" (pyvenv-virtualenv-list))
-	    (pyvenv-create venv-name (read-file-name "Python interpreter to use: "
-						     (file-name-directory (executable-find "python"))
-						     nil nil "python")))
+	    (pyvenv-create venv-name (rlbr/get-python-executable)))
 	  (setq venv-name "emacs-default-venv")))
       (rlbr/setup-python-venv-dirlocals library-root venv-name)
       venv-name))
 
   (defun rlbr/init-venv ()
     (when (eq major-mode 'python-mode)
-      (unless (or pyvenv-workon (apply 'string-prefix-p (mapcar 'file-truename (list (pyvenv-workon-home) buffer-file-name))))
-	(setq-local pyvenv-workon (rlbr/init-python-venv-in-library-root)))))
+      (unless (apply
+	       'string-prefix-p
+	       (mapcar
+		'file-truename
+		(list
+		 (pyvenv-workon-home)
+		 buffer-file-name)))
+	(if (and pyvenv-workon (not (member pyvenv-workon (pyvenv-virtualenv-list))))
+	    (if (y-or-n-p
+		 (format "Venv '%s' is specified but does not exist. Create it?" pyvenv-workon))
+		(pyvenv-create pyvenv-workon (rlbr/get-python-executable))
+	      ((rlbr/save-buffer-func-to-file
+		(let ((default-directory (elpy-library-root)))
+		  (expand-file-name
+		   ".dir-locals.el"))
+		'delete-dir-local-variable
+		'(python pyvenv-workon))))
+	  (setq-local
+	   pyvenv-workon
+	   (rlbr/init-python-venv-in-library-root)))))))
 #+END_SRC
 *** bindings/settings
 #+BEGIN_SRC emacs-lisp
