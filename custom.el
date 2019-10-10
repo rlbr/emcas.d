@@ -22,6 +22,8 @@
  '(dired-listing-switches "-alh")
  '(elpy-eldoc-show-current-function
    nil)
+ '(find-file-suppress-same-file-warnings
+   t)
  '(hippie-expand-try-functions-list
    (quote
     (try-expand-dabbrev
@@ -57,7 +59,9 @@
  '(menu-bar-mode nil)
  '(package-selected-packages
    (quote
-    (elmacro
+    (autodisass-java-bytecode
+     meghanada
+     elmacro
      ace-window
      winum
      spaceline
