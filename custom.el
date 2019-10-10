@@ -22,6 +22,8 @@
  '(dired-listing-switches "-alh")
  '(elpy-eldoc-show-current-function
    nil)
+ '(find-file-suppress-same-file-warnings
+   t)
  '(hippie-expand-try-functions-list
    (quote
     (try-expand-dabbrev
