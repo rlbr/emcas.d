@@ -294,6 +294,16 @@ This handy function is a customized ripoff of custom-save-all
 #+END_SRC
 *** custom feature
 #+BEGIN_SRC emacs-lisp
+  (defun rlbr/join-venv-with-number (number-name)
+    "Join a list with a name and a number"
+    (let
+	((number (car number-name))
+	 (name (cdr number-name)))
+      (if (= number 0)
+	  name
+	(string-join (list name (number-to-string number))
+		     "~"))))
+
   (defun rlbr/split-venv-with-number (name-number)
     "Split a virtualenv name with either a ~ seperating the name and the number, or nothing"
     (let ((split-result (split-string name-number (regexp-quote "~")))
@@ -313,15 +323,6 @@ This handy function is a customized ripoff of custom-save-all
 	   ret)))
       ret))
 
-  (defun rlbr/join-venv-with-number (number-name)
-    "Join a list with a name and a number"
-    (let
-	((number (car number-name))
-	 (name (cdr number-name)))
-      (if (= number 0)
-	  name
-	(string-join (list name (number-to-string number)) "~"))))
-
   (defun rlbr/get-venv-name (&optional library-root)
     "Generate venv name based off of the base-name of the library root"
     (file-name-base
@@ -337,7 +338,9 @@ This handy function is a customized ripoff of custom-save-all
       (setq venv-partition-name (rlbr/split-venv-with-number venv-name))
       (setq venv-conflicts
 	    (seq-filter
-	     (lambda (item) (string-equal (cdr item) venv-name))
+	     (lambda (item)
+	       (string-equal (cdr item)
+			     venv-name))
 	     (mapcar #'rlbr/split-venv-with-number (pyvenv-virtualenv-list))))
       (when venv-conflicts
 	(setcar venv-partition-name (1+ (apply 'max (mapcar #'car venv-conflicts)))))
@@ -370,54 +373,42 @@ This handy function is a customized ripoff of custom-save-all
 	    (vc-ignore ".dir-locals.el"))))))
 
   (defun rlbr/get-python-executable ()
-    (read-file-name "Python interpreter to use: " (file-name-directory (executable-find "python")) nil nil "python"))
+    (read-file-name "Python interpreter to use: " (file-name-directory (executable-find "python"))
+		    nil nil "python"))
 
   (defun rlbr/init-python-venv-in-library-root (&optional library-root)
-    "Prompt to either create one or use default"
-    (let ((venv-name (rlbr/get-venv-name))
-	  (library-root (if library-root
-			    library-root
-			  (elpy-library-root))))
-      (setq venv-name (rlbr/handle-name-conflicts venv-name))
-      (if (y-or-n-p (format "Create venv '%s'?" venv-name))
-	  (pyvenv-create venv-name (rlbr/get-python-executable))
-	(progn
-	  (unless (member "emacs-default-venv" (pyvenv-virtualenv-list))
-	    (pyvenv-create venv-name (rlbr/get-python-executable)))
-	  (setq venv-name "emacs-default-venv")))
-      (rlbr/setup-python-venv-dirlocals library-root venv-name)
-      venv-name))
+    "Prompt to either create one or use default" (let ((venv-name (rlbr/get-venv-name))
+						       (library-root (if library-root library-root (elpy-library-root))))
+						   (setq venv-name (rlbr/handle-name-conflicts venv-name))
+						   (if (y-or-n-p (format "Create venv '%s'?" venv-name))
+						       (pyvenv-create venv-name (rlbr/get-python-executable))
+						     (progn (unless (member "emacs-default-venv" (pyvenv-virtualenv-list))
+							      (pyvenv-create venv-name (rlbr/get-python-executable)))
+							    (setq venv-name "emacs-default-venv")))
+						   (rlbr/setup-python-venv-dirlocals library-root venv-name)
+						   venv-name))
   (require 'dash)
   (defun rlbr/init-venv ()
     (when (eq major-mode 'python-mode)
-      (unless
-	  (let ((buffer-file-name (file-truename buffer-file-name)))
-	    (-any (lambda (file-prefix) (string-prefix-p file-prefix buffer-file-name))
-		  (mapcar 'file-truename
-			  (list
-			   (elpy-rpc-get-or-create-virtualenv)
-			   (pyvenv-workon-home)))))
-	(cond
-	 ((and pyvenv-workon (not (member pyvenv-workon (pyvenv-virtualenv-list))))
-	  (if (y-or-n-p
-	       (format "Venv '%s' is specified but does not exist. Create it?" pyvenv-workon))
-	      (progn
-		(pyvenv-create pyvenv-workon (rlbr/get-python-executable))
-		(pyvenv-workon pyvenv-workon))
-	    (rlbr/save-buffer-func-to-file
-	     (let ((default-directory (elpy-library-root)))
-	       (expand-file-name
-		".dir-locals.el"))
-	     'add-dir-local-variable
-	     '(python-mode pyvenv-workon "emacs-default-venv"))
-	    (setq-local
-	     pyvenv-workon
-	     "emacs-default-venv")))
-	 ((not pyvenv-workon)
-	  (setq-local
-	   pyvenv-workon
-	   (rlbr/init-python-venv-in-library-root))))
-	(pyvenv-workon pyvenv-workon))))
+      (cond ((file-remote-p buffer-file-name)
+	     (setq-local pyvenv-workon "emacs-default-venv"))
+	    ((let ((buffer-file-name (file-truename buffer-file-name)))
+	       (-any (lambda (file-prefix)
+		       (string-prefix-p file-prefix buffer-file-name))
+		     (mapcar 'file-truename (list (elpy-rpc-get-or-create-virtualenv)
+						  (pyvenv-workon-home)))))
+	     nil)
+	    (t (cond ((and pyvenv-workon (not (member pyvenv-workon (pyvenv-virtualenv-list))))
+		      (if (y-or-n-p (format "Venv '%s' is specified but does not exist. Create it?" pyvenv-workon))
+			  (progn (pyvenv-create pyvenv-workon (rlbr/get-python-executable))
+				 (pyvenv-workon pyvenv-workon))
+			(rlbr/save-buffer-func-to-file (let ((default-directory (elpy-library-root)))
+							 (expand-file-name ".dir-locals.el"))
+						       'add-dir-local-variable '(python-mode pyvenv-workon "emacs-default-venv"))
+			(setq-local pyvenv-workon "emacs-default-venv")))
+		     ((not pyvenv-workon)
+		      (setq-local pyvenv-workon (rlbr/init-python-venv-in-library-root))))))
+      (pyvenv-workon pyvenv-workon)))
 #+END_SRC
 *** bindings/settings
 #+BEGIN_SRC emacs-lisp
