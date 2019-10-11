@@ -1,4 +1,10 @@
 * Editing
+** Imenu
+#+BEGIN_SRC emacs-lisp
+  (use-package imenu
+    :bind
+    ("C-S-s" . imenu))
+#+END_SRC
 ** IEdit mode
 #+BEGIN_SRC emacs-lisp
   (use-package iedit
