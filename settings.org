@@ -37,29 +37,32 @@ Jump to symbol, go up list, lispy-multiline. Great for diff-friendly custom
 Run command for each matching exe and see if output-p is true when fed the command output
 #+BEGIN_SRC emacs-lisp
   (defun rlbr/output-matches (output-matches-p exe args)
-	"locate the executable whose output satisfies output-matches-p when fed args and return the full-path"
-	(let ((exec-path exec-path)
-	      (output)
-	      (bad)
-	      (command-output)
-	      (current-exe)
-	      (failed))
-	  (while (not (or output failed))
-	    (setq current-exe
-		  (executable-find exe))
-	    (if current-exe
+    "locate the executable whose output satisfies output-matches-p when fed args and return the full-path"
+    (let ((exec-path exec-path)
+	  (output)
+	  (bad)
+	  (command-output)
+	  (current-exe)
+	  (failed))
+      (while (not (or output failed))
+	(setq current-exe
+	      (executable-find exe))
+	(if current-exe
+	    (progn
+	      (setq command-output
+		    (shell-command-to-string (format "%s %s" (rlbr/quote-exe current-exe)
+						     args)))
+	      (if (funcall output-matches-p command-output)
+		  (setq output current-exe)
 		(progn
-		  (setq command-output
-			(shell-command-to-string (format "%s %s" (rlbr/quote-exe current-exe) args)))
-		  (if (funcall output-matches-p command-output)
-		      (setq output current-exe)
-		    (progn
-		      (setq bad
-			    (replace-regexp-in-string "/$" "" (file-name-directory current-exe)))
-		      (setq exec-path
-			    (seq-filter (lambda (item) (not (rlbr/case-insensitive-match item bad))) exec-path)))))
-	      (setq failed t)))
-	  output))
+		  (setq bad
+			(replace-regexp-in-string "/$" "" (file-name-directory current-exe)))
+		  (setq exec-path
+			(seq-filter (lambda (item)
+				      (not (rlbr/case-insensitive-match item bad)))
+				    exec-path)))))
+	  (setq failed t)))
+      output))
 #+END_SRC
 ** Save buffer-output to file
 This handy function is a customized ripoff of custom-save-all
@@ -67,38 +70,28 @@ This handy function is a customized ripoff of custom-save-all
   (defun rlbr/save-buffer-func-to-file (visit-file func args)
     "Rip off of custom-save-all"
     (let* ((filename visit-file)
-	   (recentf-exclude (if recentf-mode
-				(append
-				 `(,(concat "\\`" (regexp-quote (recentf-expand-file-name visit-file)) "\\'")
-				   ,(concat "\\`" (regexp-quote (file-truename (recentf-expand-file-name visit-file))) "\\'"))
-				 recentf-exclude)))
+	   (recentf-exclude (if recentf-mode (append `(,(concat "\\`" (regexp-quote (recentf-expand-file-name visit-file))
+								"\\'")
+						       ,(concat "\\`" (regexp-quote (file-truename (recentf-expand-file-name visit-file)))
+								"\\'"))
+						     recentf-exclude)))
 	   (old-buffer (find-buffer-visiting filename))
 	   old-buffer-name)
-      (with-current-buffer
-	  (let ((find-file-visit-truename t))
-	    (or old-buffer
-		(let ((delay-mode-hooks t))
-		  (find-file-noselect filename))))
-	(when old-buffer
-	  (setq old-buffer-name
-		(buffer-file-name))
-	  (set-visited-file-name
-	   (file-chase-links filename)))
-	(unless (eq major-mode
-		    'emacs-lisp-mode)
-	  (delay-mode-hooks
-	    (emacs-lisp-mode)))
+      (with-current-buffer (let ((find-file-visit-truename t))
+			     (or old-buffer (let ((delay-mode-hooks t))
+					      (find-file-noselect filename))))
+	(when old-buffer (setq old-buffer-name (buffer-file-name))
+	      (set-visited-file-name (file-chase-links filename)))
+	(unless (eq major-mode 'emacs-lisp-mode)
+	  (delay-mode-hooks (emacs-lisp-mode)))
 	(let ((inhibit-read-only t)
 	      (print-length nil)
 	      (print-level nil))
 	  (apply func args))
 	(let ((file-precious-flag t))
 	  (save-buffer))
-	(if old-buffer
-	    (progn
-	      (set-visited-file-name
-	       old-buffer-name)
-	      (set-buffer-modified-p nil))
+	(if old-buffer (progn (set-visited-file-name old-buffer-name)
+			      (set-buffer-modified-p nil))
 	  (kill-buffer (current-buffer))))))
 #+END_SRC
 * Save/load
@@ -126,40 +119,37 @@ This handy function is a customized ripoff of custom-save-all
 ** Windows
 #+BEGIN_SRC emacs-lisp
   (when (string-equal system-type "windows-nt")
-    (progn
-      (defun rlbr/quote-exe (path)
-	(w32-short-file-name path))
-      (defun rlbr/start-external-shell ()
-	(interactive)
-	(start-process-shell-command (format "cmd(%s)" default-directory) nil "start default.bat"))
-      (global-set-key (kbd "C-S-C") 'rlbr/start-external-shell)
-      (defun rlbr/start-windows-explorer-here ()
-	(interactive)
-	(start-process-shell-command "explorer" nil (format "explorer %s" (replace-regexp-in-string "/" (regexp-quote "\\") (expand-file-name default-directory)))))
-      (global-set-key (kbd "C-S-E") 'rlbr/start-windows-explorer-here)
-      (defun rlbr/case-insensitive-match (string1 string2)
-	(apply 'string-equal (mapcar 'downcase (list string1 string2))))
-      (let ((find)
-	    (grep)
-	    (ls))
-	(progn
-	  (setq find
-		(rlbr/output-matches
-		 (lambda (output) (string-equal ".\n" output))
-		 "find" "-maxdepth 0"))
-	  (if find
-	      (setq find-program (rlbr/quote-exe find)))
-	  (setq grep (rlbr/output-matches
-		      (lambda (output) (string-match "grep (\\w+ grep)" output))
-		      "grep" "-V"))
-	  (if grep
-	      (setq grep-program
-		    (rlbr/quote-exe grep)))
-	  (setq ls (rlbr/output-matches
-		    (lambda (output) (string-match "ls: .*'\\?/': No such file or directory" output))
-		    "ls" "?/"))
-	  (if ls
-	      (setq insert-directory-program (rlbr/quote-exe ls)))))))
+    (progn (defun rlbr/quote-exe (path)
+	     (w32-short-file-name path))
+	   (defun rlbr/start-external-shell ()
+	     (interactive)
+	     (start-process-shell-command (format "cmd(%s)" default-directory)
+					  nil "start default.bat"))
+	   (global-set-key (kbd "C-S-C")
+			   'rlbr/start-external-shell)
+	   (defun rlbr/start-windows-explorer-here ()
+	     (interactive)
+	     (start-process-shell-command "explorer" nil (format "explorer %s" (replace-regexp-in-string "/" (regexp-quote "\\")
+													 (expand-file-name default-directory)))))
+	   (global-set-key (kbd "C-S-E")
+			   'rlbr/start-windows-explorer-here)
+	   (defun rlbr/case-insensitive-match (string1 string2)
+	     (apply 'string-equal (mapcar 'downcase (list string1 string2))))
+	   (let ((find)
+		 (grep)
+		 (ls))
+	     (progn (setq find (rlbr/output-matches (lambda (output)
+						      (string-equal ".\n" output))
+						    "find" "-maxdepth 0"))
+		    (if find (setq find-program (rlbr/quote-exe find)))
+		    (setq grep (rlbr/output-matches (lambda (output)
+						      (string-match "grep (\\w+ grep)" output))
+						    "grep" "-V"))
+		    (if grep (setq grep-program (rlbr/quote-exe grep)))
+		    (setq ls (rlbr/output-matches (lambda (output)
+						    (string-match "ls: .*'\\?/': No such file or directory" output))
+						  "ls" "?/"))
+		    (if ls (setq insert-directory-program (rlbr/quote-exe ls)))))))
 #+END_SRC
 * Tramp configuration
 ** Tramp append plist to connection properties
@@ -169,13 +159,9 @@ This handy function is a customized ripoff of custom-save-all
     (defun rlbr/add-config-to-tramp (matches-regexp config-plist)
       (let ((config-alist (kvplist->alist config-plist)))
 	(dolist (pair config-alist)
-	  (let ((config (list
-			 matches-regexp
-			 (car pair)
-			 (cdr pair))))
-	    (add-to-list
-	     'tramp-connection-properties
-	     config))))))
+	  (let ((config (list matches-regexp (car pair)
+			      (cdr pair))))
+	    (add-to-list 'tramp-connection-properties config))))))
 #+END_SRC
 ** Android
 #+BEGIN_SRC emacs-lisp
@@ -500,21 +486,24 @@ This handy function is a customized ripoff of custom-save-all
 ** IBuffer mode
 #+BEGIN_SRC emacs-lisp
   (use-package ibbufer-vc
-    :hook ((ibuffer-mode . ibuffer-vc-set-filter-groups-by-vc-root)))
-  (use-package ibuffer
-    :bind (("C-x C-b" . ibuffer))
-    :config
-    (define-ibuffer-column size-h
-      ;; Use human readable Size column instead of original one
-      (:name "Size" :inline t)
-      (cond ((> (buffer-size) 1000000)
-	     (format "%7.1fM" (/ (buffer-size) 1000000.0)))
-	    ((> (buffer-size) 100000)
-	     (format "%7.0fk" (/ (buffer-size) 1000.0)))
-	    ((> (buffer-size) 1000)
-	     (format "%7.1fk" (/ (buffer-size) 1000.0)))
-	    (t
-	     (format "%8d" (buffer-size))))))
+    :hook
+    ((ibuffer-mode . ibuffer-vc-set-filter-groups-by-vc-root)))
+  ;; Use human readable Size column instead of original one
+  (use-package ibuffer :bind (("C-x C-b" . ibuffer))
+    :config (define-ibuffer-column size-h (:name "Size" :inline t)
+	      (cond ((> (buffer-size)
+			1000000)
+		     (format "%7.1fM" (/ (buffer-size)
+					 1000000.0)))
+		    ((> (buffer-size)
+			100000)
+		     (format "%7.0fk" (/ (buffer-size)
+					 1000.0)))
+		    ((> (buffer-size)
+			1000)
+		     (format "%7.1fk" (/ (buffer-size)
+					 1000.0)))
+		    (t (format "%8d" (buffer-size))))))
 #+END_SRC
 ** Ivy
 #+BEGIN_SRC emacs-lisp
@@ -538,21 +527,18 @@ This handy function is a customized ripoff of custom-save-all
 ** Spaceline
 #+BEGIN_SRC emacs-lisp
   (use-package spaceline-config
-    :config
-    (use-package winum
-      :init
-      (setq winum-keymap
-	    (let ((map (make-sparse-keymap)))
-	      (define-key map (kbd "M-0") 'winum-select-window-0-or-10)
-	      (define-key map (kbd "M-1") 'winum-select-window-1)
-	      (define-key map (kbd "M-2") 'winum-select-window-2)
-	      (define-key map (kbd "M-3") 'winum-select-window-3)
-	      (define-key map (kbd "M-4") 'winum-select-window-4)
-	      (define-key map (kbd "M-5") 'winum-select-window-5)
-	      (define-key map (kbd "M-6") 'winum-select-window-6)
-	      (define-key map (kbd "M-7") 'winum-select-window-7)
-	      (define-key map (kbd "M-8") 'winum-select-window-8)
-	      map)))
+    :config (use-package winum
+	      :bind
+	      (:map winum-keymap
+		    (("M-0" . winum-select-window-0-or-10)
+		     ("M-1" . winum-select-window-1)
+		     ("M-2" . winum-select-window-2)
+		     ("M-3" . winum-select-window-3)
+		     ("M-4" . winum-select-window-4)
+		     ("M-5" . winum-select-window-5)
+		     ("M-6" . winum-select-window-6)
+		     ("M-7" . winum-select-window-7)
+		     ("M-8" . winum-select-window-8))))
     (spaceline-spacemacs-theme)
     (winum-mode))
 #+END_SRC
