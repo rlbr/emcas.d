@@ -59,7 +59,8 @@
  '(menu-bar-mode nil)
  '(package-selected-packages
    (quote
-    (autodisass-java-bytecode
+    (format-all
+     autodisass-java-bytecode
      meghanada
      elmacro
      ace-window

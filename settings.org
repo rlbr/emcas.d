@@ -189,6 +189,14 @@ This handy function is a customized ripoff of custom-save-all
 		       (rlbr/add-config-to-tramp "/ssh:termux.*:" android-config)))
 #+END_SRC
 * Major modes
+** C
+#+BEGIN_SRC emacs-lisp
+  (use-package cc-mode
+    :mode ("\\.c\\'" . c-mode)
+    :hook (c-mode . format-all-mode)
+    :config
+    (use-package format-all))
+#+END_SRC
 ** Java
 *** Meghanada
 #+BEGIN_SRC emacs-lisp
