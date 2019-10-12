@@ -191,11 +191,9 @@ This handy function is a customized ripoff of custom-save-all
 * Major modes
 ** C
 #+BEGIN_SRC emacs-lisp
-  (use-package cc-mode
-    :mode ("\\.c\\'" . c-mode)
-    :hook (c-mode . format-all-mode)
-    :config
-    (use-package format-all))
+  (use-package format-all
+    :if (executable-find "clang-format")
+    :hook (c-mode . format-all-mode))
 #+END_SRC
 ** Java
 *** Meghanada
