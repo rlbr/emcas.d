@@ -469,7 +469,7 @@ This handy function is a customized ripoff of custom-save-all
 #+END_SRC
 *** Emacs
 #+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "C-x C-k C-x C-k") 'kill-emacs)
+  (global-set-key (kbd "C-x C-k C-x C-k") 'save-buffers-kill-emacs)
 #+END_SRC
 ** Lispy
 #+BEGIN_SRC emacs-lisp
