@@ -290,6 +290,25 @@ This handy function is a customized ripoff of custom-save-all
 	 ((string-equal system-type "windows-nt")
 	  "pythonw.exe")))
 #+END_SRC
+put executables in elpy-rpc-venv in path
+#+BEGIN_SRC emacs-lisp
+
+  (defun rlbr/elpy-append-to-path ()
+      (setenv "PATH" (string-join (list (getenv "PATH")
+					(let ((default-directory (elpy-rpc-get-or-create-virtualenv))
+					      (path-entry)
+					      (elpy-binpath))
+					  (if (string-equal system-type "windows-nt")
+					      (progn (setq path-entry (replace-regexp-in-string (regexp-quote "/")
+												(regexp-quote "\\")
+												elpy-binpath))
+						     (setq elpy-binpath (expand-file-name "Scripts")))
+					    (setq elpy-binpath (expand-file-name "bin"))
+					    (setq path-entry elpy-binpath))
+					  (nconc exec-path (list elpy-binpath))
+					  elpy-binpath))
+				  path-separator)))
+#+END_SRC
 *** custom feature
 #+BEGIN_SRC emacs-lisp
   (defun rlbr/join-venv-with-number (number-name)
