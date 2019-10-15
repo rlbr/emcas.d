@@ -57,6 +57,7 @@
       filename))))
  '(inhibit-startup-screen t)
  '(menu-bar-mode nil)
+ '(org-imenu-depth 5)
  '(package-selected-packages
    (quote
     (realgud
