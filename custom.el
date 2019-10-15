@@ -108,6 +108,7 @@
      apache-mode
      web-mode
      undo-tree)))
+ '(python-check-command "flake8")
  '(reb-re-syntax (quote string))
  '(safe-local-variable-values
    (quote ((project-venv))))
