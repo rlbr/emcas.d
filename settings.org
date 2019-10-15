@@ -434,14 +434,22 @@ put executables in elpy-rpc-venv in path
 *** bindings/settings
 #+BEGIN_SRC emacs-lisp
   (use-package python
-    :hook ((python-mode . blacken-mode)
-	   (python-mode . pyvenv-mode)
-	   (hack-local-variables . rlbr/init-venv))
+    :hook
+    ((python-mode . pyvenv-mode)
+     (python-mode . flycheck-mode)
+     (python-mode . (lambda () (add-hook 'before-save-hook 'elpy-black-fix-code nil 'local))))
+    :bind
+    (:map python-mode-map
+	  (("C-<" . flycheck-previous-error)
+	   ("C->" . flycheck-next-error)))
     :config
     (use-package elpy
+      :hook (hack-local-variables . rlbr/init-venv)
       :bind (("C-=" . elpy-goto-assignment))
-      :config (when (require 'flycheck nil t)
-		(setq elpy-modules (delq 'elpy-module-flymake elpy-modules))))
+      :config
+      (when (require 'flycheck nil t)
+	(setq elpy-modules (delq 'elpy-module-flymake elpy-modules)))
+      (rlbr/elpy-append-to-path))
     (elpy-enable))
 #+END_SRC
 ** SSH config mode

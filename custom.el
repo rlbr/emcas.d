@@ -82,7 +82,6 @@
      mode-line-bell
      htmlize
      cython-mode
-     blacken
      dired-narrow
      lua-mode
      browse-kill-ring
