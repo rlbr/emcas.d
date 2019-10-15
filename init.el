@@ -1,3 +1,6 @@
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file 'noerror)
+
 (require 'package)
 
 (add-to-list 'package-archives
@@ -11,8 +14,6 @@
 	    (package-install package)))
       package-selected-packages)
 (require 'org)
-(setq custom-file "~/.emacs.d/custom.el")
-(load custom-file 'noerror)
 (org-babel-load-file
  (expand-file-name "settings.org"
                    user-emacs-directory))
