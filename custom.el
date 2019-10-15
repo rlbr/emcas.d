@@ -59,7 +59,8 @@
  '(menu-bar-mode nil)
  '(package-selected-packages
    (quote
-    (format-all
+    (realgud
+     format-all
      autodisass-java-bytecode
      meghanada
      elmacro
