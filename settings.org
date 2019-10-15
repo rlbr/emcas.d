@@ -310,9 +310,10 @@ put executables in elpy-rpc-venv in path
 				path-separator)))
 #+END_SRC
 #+BEGIN_SRC emacs-lisp
-  (unless (= 0 (call-process elpy-rpc-python-command nil nil nil "-c" "import multiprocessing;multiprocessing.Pool()"))
-    (setq python-check-command
-	  (string-join `(,python-check-command "--jobs=1") " ")))
+  (defun rlbr/fix-for-android ()
+    (unless (= 0 (call-process elpy-rpc-python-command nil nil nil "-c" "import multiprocessing;multiprocessing.Pool()"))
+      (setq python-check-command
+	    (string-join `(,python-check-command "--jobs=1") " "))))
 #+END_SRC
 *** custom feature
 #+BEGIN_SRC emacs-lisp
@@ -454,7 +455,8 @@ put executables in elpy-rpc-venv in path
       :config
       (when (require 'flycheck nil t)
 	(setq elpy-modules (delq 'elpy-module-flymake elpy-modules)))
-      (rlbr/elpy-append-to-path))
+      (rlbr/elpy-append-to-path)
+      (rlbr/fix-for-android))
     (elpy-enable))
 #+END_SRC
 ** SSH config mode
