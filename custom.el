@@ -10,14 +10,6 @@
  '(backup-directory-alist
    (quote
     ((".*" . "~/.emacs.d/backup"))))
- '(custom-enabled-themes
-   (quote (dracula)))
- '(custom-safe-themes
-   (quote
-    ("35b0b0e531731e270708ddb342dc2e576a31fb298dcbc56a206596a43afac54f"
-     "1e922202769ed113de72a203c85726f98b5c86523c55629f95489c083fe2472a"
-     "274fa62b00d732d093fc3f120aca1b31a6bb484492f31081c1814a858e25c72e"
-     default)))
  '(delete-by-moving-to-trash t)
  '(dired-listing-switches "-alh")
  '(elpy-eldoc-show-current-function

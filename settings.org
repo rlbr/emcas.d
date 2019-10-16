@@ -552,6 +552,12 @@ put executables in elpy-rpc-venv in path
     (ivy-mode))
 #+END_SRC
 * Look and feel
+** Theme
+#+BEGIN_SRC emacs-lisp
+  (use-package dracula-theme
+    :config
+    (load-theme 'dracula t))
+#+END_SRC
 ** Line numbers
 #+BEGIN_SRC emacs-lisp
   (global-display-line-numbers-mode)
