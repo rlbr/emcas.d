@@ -2,7 +2,8 @@
 (load custom-file 'noerror)
 
 (require 'package)
-
+(when (version< emacs-version "26.2")
+  (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 (add-to-list 'package-archives
 	     '("melpa" . "https://melpa.org/packages/") t)
 
