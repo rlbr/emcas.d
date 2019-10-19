@@ -424,8 +424,11 @@ put executables in elpy-rpc-venv in path
 	    ((let ((buffer-file-name (file-truename buffer-file-name)))
 	       (-any (lambda (file-prefix)
 		       (string-prefix-p file-prefix buffer-file-name))
-		     (mapcar 'file-truename (list (elpy-rpc-get-or-create-virtualenv)
-						  (pyvenv-workon-home)))))
+		     (mapcar 'file-truename (list
+					     "/usr/lib/python"
+					     "~/.pyenv/versions/"
+					     (elpy-rpc-get-or-create-virtualenv)
+					     (pyvenv-workon-home)))))
 	     nil)
 	    (t (cond ((and pyvenv-workon (not (member pyvenv-workon (pyvenv-virtualenv-list))))
 		      (if (y-or-n-p (format "Venv '%s' is specified but does not exist. Create it?" pyvenv-workon))
