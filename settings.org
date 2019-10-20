@@ -425,6 +425,7 @@ put executables in elpy-rpc-venv in path
   (defun rlbr/init-venv ()
     (when (eq major-mode 'python-mode)
       (cond ((file-remote-p buffer-file-name)
+	     ;; If the file is remote, don't try and do anything fancy
 	     (setq-local pyvenv-workon (emacs-default-venv)))
 	    ((let ((buffer-file-name (file-truename buffer-file-name)))
 	       (-any (lambda (file-prefix)
@@ -434,17 +435,22 @@ put executables in elpy-rpc-venv in path
 					     "~/.pyenv/versions/"
 					     (elpy-rpc-get-or-create-virtualenv)
 					     (pyvenv-workon-home)))))
+	     ;; Don't change anything if entering a file in a python install's lib (ie xref)
 	     nil)
-	    (t (cond ((and pyvenv-workon (not (member pyvenv-workon (pyvenv-virtualenv-list))))
-		      (if (y-or-n-p (format "Venv '%s' is specified but does not exist. Create it?" pyvenv-workon))
-			  (progn (pyvenv-create pyvenv-workon (rlbr/get-python-executable))
-				 (pyvenv-workon pyvenv-workon))
-			(rlbr/save-buffer-func-to-file (let ((default-directory (elpy-library-root)))
-							 (expand-file-name ".dir-locals.el"))
-						       'add-dir-local-variable '(python-mode pyvenv-workon (emacs-default-venv)))
-			(setq-local pyvenv-workon (emacs-default-venv))))
-		     ((not pyvenv-workon)
-		      (setq-local pyvenv-workon (rlbr/init-python-venv-in-library-root))))))
+	    (t
+	     ;; Upon failing all conditions, prompt to create virtual environment if it doesn't exist
+	     (cond ((and pyvenv-workon (not (member pyvenv-workon (pyvenv-virtualenv-list))))
+		    ;; If there is a virtualenv specified and it doesn't exist, prompt to create it or set to default virtual environment
+		    (if (y-or-n-p (format "Venv '%s' is specified but does not exist. Create it?" pyvenv-workon))
+			(progn (pyvenv-create pyvenv-workon (rlbr/get-python-executable))
+			       (pyvenv-workon pyvenv-workon))
+		      (rlbr/save-buffer-func-to-file (let ((default-directory (elpy-library-root)))
+						       (expand-file-name ".dir-locals.el"))
+						     'add-dir-local-variable '(python-mode pyvenv-workon (emacs-default-venv)))
+		      (setq-local pyvenv-workon (emacs-default-venv))))
+		   ((not pyvenv-workon)
+		    ;; If nothing has already set pyvenv-workon, create venv
+		    (setq-local pyvenv-workon (rlbr/init-python-venv-in-library-root))))))
       (pyvenv-workon pyvenv-workon)))
 #+END_SRC
 *** bindings/settings
