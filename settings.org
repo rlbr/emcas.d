@@ -94,6 +94,11 @@ This handy function is a customized ripoff of custom-save-all
 			      (set-buffer-modified-p nil))
 	  (kill-buffer (current-buffer))))))
 #+END_SRC
+** Low memeory check
+#+BEGIN_SRC emacs-lisp
+  (defun rlbr/high-mem () (>= (nth 1 (memory-info))
+			      (expt 1024 2)))
+#+END_SRC
 * Save/load
 ** Backup/auto-save
 #+BEGIN_SRC emacs-lisp
@@ -121,6 +126,7 @@ This handy function is a customized ripoff of custom-save-all
   (when (string-equal system-type "windows-nt")
     (progn (defun rlbr/quote-exe (path)
 	     (w32-short-file-name path))
+	   (defun rlbr/high-mem () t)
 	   (defun rlbr/start-external-shell ()
 	     (interactive)
 	     (start-process-shell-command (format "cmd(%s)" default-directory)
@@ -188,8 +194,7 @@ This handy function is a customized ripoff of custom-save-all
     :defer t)
 
   (use-package meghanada
-    :if (>= (nth 1 (memory-info))
-	    (expt 1024 2))
+    :if (rlbr/high-mem)
     :defer t
     :init
     (add-hook 'java-mode-hook
