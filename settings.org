@@ -99,6 +99,12 @@ This handy function is a customized ripoff of custom-save-all
   (defun rlbr/high-mem () (>= (nth 1 (memory-info))
 			      (expt 1024 2)))
 #+END_SRC
+** Kill this buffer
+#+BEGIN_SRC emacs-lisp
+  (defun rlbr/kill-this-buffer ()
+    (interactive)
+    (kill-buffer (current-buffer)))
+#+END_SRC
 * Save/load
 ** Backup/auto-save
 #+BEGIN_SRC emacs-lisp
@@ -503,7 +509,7 @@ put executables in elpy-rpc-venv in path
 ** Kill the things
 *** Buffer
 #+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "C-x k") 'kill-this-buffer)
+(global-set-key (kbd "C-x k") 'rlbr/kill-this-buffer)
 #+END_SRC
 *** Emacs
 #+BEGIN_SRC emacs-lisp
