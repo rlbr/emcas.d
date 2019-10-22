@@ -473,12 +473,16 @@ put executables in elpy-rpc-venv in path
     :config
     (use-package elpy
       :hook (hack-local-variables . rlbr/init-venv)
-      :bind (("C-=" . elpy-goto-assignment))
+      :bind (:map python-mode-map
+		  (("C-=" . elpy-goto-assignment)))
       :config
       (when (require 'flycheck nil t)
 	(setq elpy-modules (delq 'elpy-module-flymake elpy-modules)))
       (rlbr/elpy-append-to-path)
       (rlbr/fix-for-android))
+    (use-package realgud
+      :bind (:map python-mode-map
+		  (("C-c d b" . realgud:pdb))))
     (elpy-enable))
 #+END_SRC
 ** SSH config mode
