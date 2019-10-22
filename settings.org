@@ -328,7 +328,7 @@ put executables in elpy-rpc-venv in path
       (setq python-check-command
 	    (string-join `(,python-check-command "--jobs=1") " "))))
 #+END_SRC
-*** custom feature
+*** Custom feature
 #+BEGIN_SRC emacs-lisp
   (defun rlbr/join-venv-with-number (number-name)
     "Join a list with a name and a number"
@@ -459,7 +459,7 @@ put executables in elpy-rpc-venv in path
 		    (setq-local pyvenv-workon (rlbr/init-python-venv-in-library-root))))))
       (pyvenv-workon pyvenv-workon)))
 #+END_SRC
-*** bindings/settings
+*** Bindings/settings
 #+BEGIN_SRC emacs-lisp
   (use-package python
     :hook
