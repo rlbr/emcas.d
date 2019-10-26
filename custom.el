@@ -71,7 +71,8 @@
  '(org-imenu-depth 5)
  '(package-selected-packages
    (quote
-    (realgud
+    (ahk-mode
+     realgud
      format-all
      autodisass-java-bytecode
      meghanada
