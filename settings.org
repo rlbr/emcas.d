@@ -213,6 +213,11 @@ This handy function is a customized ripoff of custom-save-all
     (setq indent-tabs-mode nil)
     (setq meghanada-server-remote-debug t)
     (setq meghanada-javac-xlint "-Xlint:all,-processing")
+    (advice-add 'meghanada-code-beautify :around (lambda (old)
+						   (interactive)
+						   (let ((p (point)))
+						     (apply old nil)
+						     (goto-char p))))
     (defhydra hydra-meghanada (:hint nil :exit t)
       "
   ^Edit^                           ^Tast or Task^
