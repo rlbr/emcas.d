@@ -71,7 +71,8 @@
  '(org-imenu-depth 5)
  '(package-selected-packages
    (quote
-    (ahk-mode
+    (better-shell
+     ahk-mode
      realgud
      format-all
      autodisass-java-bytecode

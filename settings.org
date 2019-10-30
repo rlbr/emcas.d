@@ -541,6 +541,14 @@ put executables in elpy-rpc-venv in path
     :config
     (elmacro-mode +1))
 #+END_SRC
+** Better shell
+#+BEGIN_SRC emacs-lisp
+  (use-package better-shell
+    :bind
+    (("C-M-;" . better-shell-shell)
+     ("C-M-:" . better-shell-remote-open)
+     ("C-#" . better-shell-sudo-here)))
+#+END_SRC
 * Navigation/auto-completion
 ** Ace window
 #+BEGIN_SRC emacs-lisp
