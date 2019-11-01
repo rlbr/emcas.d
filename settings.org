@@ -184,7 +184,7 @@ This handy function is a customized ripoff of custom-save-all
 						   "remote-shell" (expand-file-name "usr/bin/sh")
 						   "remote-process-environment" (append (list (concat "PREFIX=" default-directory "usr")) tramp-remote-process-environment)
 						   "remote-path" (append (mapcar 'expand-file-name '("home/.local/bin" "usr/bin" "usr/bin/applets")) '("/sbin" "/vendor/bin" "/system/sbin" "/system/bin" "/system/xbin"))))))
-		       (rlbr/add-config-to-tramp "/ssh:termux.*:" android-config)))
+		       (rlbr/add-config-to-tramp (rx "/" (or "scp" "ssh") (zero-or-one "x") ":" "termux" (zero-or-more any) ":") android-config)))
 #+END_SRC
 * Major modes
 ** C
@@ -541,6 +541,14 @@ put executables in elpy-rpc-venv in path
     :demand
     :config
     (elmacro-mode +1))
+#+END_SRC
+** Better shell
+#+BEGIN_SRC emacs-lisp
+  (use-package better-shell
+    :bind
+    (("C-M-;" . better-shell-shell)
+     ("C-M-:" . better-shell-remote-open)
+     ("C-#" . better-shell-sudo-here)))
 #+END_SRC
 * Navigation/auto-completion
 ** Ace window
