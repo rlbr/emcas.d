@@ -215,9 +215,10 @@ This handy function is a customized ripoff of custom-save-all
     (setq meghanada-javac-xlint "-Xlint:all,-processing")
     (advice-add 'meghanada-code-beautify :around (lambda (old)
 						   (interactive)
-						   (let ((p (point)))
+						   (let ((p (line-number-at-pos)))
 						     (apply old nil)
-						     (goto-char p))))
+						     (goto-line p)
+						     (reposition-window))))
     (defhydra hydra-meghanada (:hint nil :exit t)
       "
   ^Edit^                           ^Tast or Task^
