@@ -28,6 +28,7 @@
      try-expand-line
      try-complete-lisp-symbol-partially
      try-complete-lisp-symbol)))
+ '(ibuffer-expert t)
  '(ibuffer-formats
    (quote
     ((mark
@@ -47,6 +48,8 @@
       (name 16 -1)
       " "
       filename))))
+ '(ibuffer-show-empty-filter-groups
+   nil)
  '(inhibit-startup-screen t)
  '(magit-status-sections-hook
    (quote
@@ -71,7 +74,8 @@
  '(org-imenu-depth 5)
  '(package-selected-packages
    (quote
-    (dockerfile-mode
+    (ibuffer-tramp
+     dockerfile-mode
      docker
      docker-compose-mode
      better-shell

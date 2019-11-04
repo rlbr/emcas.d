@@ -586,6 +586,9 @@ put executables in elpy-rpc-venv in path
     ((ibuffer-mode . ibuffer-vc-set-filter-groups-by-vc-root)))
   ;; Use human readable Size column instead of original one
   (use-package ibuffer :bind (("C-x C-b" . ibuffer))
+    :bind (:map ibuffer-mode-map
+		(("C-c t" . ibuffer-tramp-set-filter-groups-by-tramp-connection)
+		 ("C-c g" . ibuffer-vc-set-filter-groups-by-vc-root)))
     :config (define-ibuffer-column size-h (:name "Size" :inline t)
 	      (cond ((> (buffer-size)
 			1000000)
