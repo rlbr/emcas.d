@@ -291,6 +291,12 @@ This handy function is a customized ripoff of custom-save-all
 	   (xref-find-definitions (xref-backend-identifier-at-point (xref-find-backend)))))))
     (define-key js-mode-map (kbd "M-.") #'rlbr/jump-to-definition))
 #+END_SRC
+** Lisp
+*** Emacs lisp
+#+BEGIN_SRC emacs-lisp
+  (use-package elisp-mode
+    :hook (emacs-lisp-mode . company-mode))
+#+END_SRC
 ** Magit
 #+BEGIN_SRC emacs-lisp
   (use-package magit
