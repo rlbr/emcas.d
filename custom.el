@@ -71,7 +71,10 @@
  '(org-imenu-depth 5)
  '(package-selected-packages
    (quote
-    (better-shell
+    (dockerfile-mode
+     docker
+     docker-compose-mode
+     better-shell
      ahk-mode
      realgud
      format-all

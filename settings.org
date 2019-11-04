@@ -195,6 +195,16 @@ This handy function is a customized ripoff of custom-save-all
     :if (executable-find "clang-format")
     :hook (c-mode . format-all-mode))
 #+END_SRC
+** Docker
+*** Docker
+*** Dockerfile
+*** Docker-compose
+#+BEGIN_SRC emacs-lisp
+  (use-package docker-compose-mode
+    :mode (rx "docker-compose.yml" eos)
+    :hook
+    (docker-compose-mode . company-mode))
+#+END_SRC
 ** Java
 *** Meghanada
 #+BEGIN_SRC emacs-lisp
