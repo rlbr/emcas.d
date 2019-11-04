@@ -96,8 +96,10 @@ This handy function is a customized ripoff of custom-save-all
 #+END_SRC
 ** Low memeory check
 #+BEGIN_SRC emacs-lisp
-  (defun rlbr/high-mem () (>= (nth 1 (memory-info))
-			      (expt 1024 2)))
+  (defun rlbr/high-mem (&optional threshold)
+    (let ((threshold (or threshold (expt 1024 2)))))
+    (>= (nth 1 (memory-info))
+	threshold))
 #+END_SRC
 ** Kill this buffer
 #+BEGIN_SRC emacs-lisp
@@ -200,7 +202,7 @@ This handy function is a customized ripoff of custom-save-all
     :defer t)
 
   (use-package meghanada
-    :if (rlbr/high-mem)
+    :if (rlbr/high-mem (* 512 1024))
     :defer t
     :init
     (add-hook 'java-mode-hook
