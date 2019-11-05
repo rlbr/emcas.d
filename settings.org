@@ -134,7 +134,7 @@ This handy function is a customized ripoff of custom-save-all
   (when (string-equal system-type "windows-nt")
     (progn (defun rlbr/quote-exe (path)
 	     (w32-short-file-name path))
-	   (defun rlbr/high-mem () t)
+	   (defun rlbr/high-mem (&optional threshold) t)
 	   (defun rlbr/start-external-shell ()
 	     (interactive)
 	     (start-process-shell-command (format "cmd(%s)" default-directory)
