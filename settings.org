@@ -458,14 +458,39 @@ put executables in elpy-rpc-venv in path
 	     ;; If the file is remote, don't try and do anything fancy
 	     (setq-local pyvenv-workon (emacs-default-venv)))
 	    ((let ((buffer-file-name (file-truename buffer-file-name)))
-	       (-any (lambda (file-prefix)
-		       (string-prefix-p file-prefix buffer-file-name))
-		     (mapcar 'file-truename (list
-					     "/usr/lib/python"
-					     "~/.pyenv/versions/"
-					     (elpy-rpc-get-or-create-virtualenv)
-					     (pyvenv-workon-home)))))
-	     ;; Don't change anything if entering a file in a python install's lib (ie xref)
+	       ;; Don't change anything if entering a file in a python install's lib (ie for a file located with xref)
+	       (if (string-match-p (rx bos (or
+					    ;; Windows
+					    (and letter "/" (one-or-more not-newline)
+						 "/Lib")
+					    ;; Rest of the sane world
+					    (and (or
+						  ;; In the home directory
+						  (and (zero-or-more not-newline)
+						       "/home/" (zero-or-more not-newline)
+						       (or
+							;; System python user installed package
+							"/.local"
+							;; In a virtualenv
+							(and "/.virtualenvs/" (one-or-more (not (any "/"))))
+							;; Elpy-rpc venv
+							(and "/.emacs.d/elpy/rpc-venv")
+							;; Using Pyenv
+							(and "/.pyenv/versions/"
+							     (one-or-more (not (any "/"))))))
+						  ;; System python
+						  (and (zero-or-more not-newline)
+						       "/usr"
+						       (opt "/local")))
+						 ;; Standard */lib/python3.7/ etc
+						 (or
+						  ;; Standard python
+						  (and "/lib/python" (one-or-more (any digit ".")))
+						  ;; PyPy
+						  (and (or "/lib-python" "/lib_pypy")))))
+				       (zero-or-more not-newline)
+				       "/" eos)
+				   buffer-file-name)))
 	     nil)
 	    (t
 	     ;; Upon failing all conditions, prompt to create virtual environment if it doesn't exist
