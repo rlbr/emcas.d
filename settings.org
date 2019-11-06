@@ -418,19 +418,16 @@ put executables in elpy-rpc-venv in path
 			     ".dir-locals.el")))
       (rlbr/save-buffer-func-to-file dir-locals-path 'add-dir-local-variable
 				     `(python-mode pyvenv-workon ,venv-name))
-      (let* ((vc-root (vc-find-root dir-locals-path ".git"))
-	     (vc-ignore-file (vc-call-backend 'Git 'find-ignore-file vc-root)))
-	(if (apply 'string-equal (mapcar 'directory-file-name (mapcar 'file-truename (list vc-root library-root))))
-	    (progn
-	      (unless (file-exists-p vc-ignore-file)
-		(with-temp-buffer
-		  (write-file vc-ignore-file)))
-	      (vc-ignore ".dir-locals.el"))
-	  (when (y-or-n-p (format "Ignore .dir-locals.el in repo '%s' ?" vc-root))
-	    (unless (file-exists-p vc-ignore-file)
-	      (with-temp-buffer
-		(write-file vc-ignore-file)))
-	    (vc-ignore ".dir-locals.el"))))))
+      (let ((vc-root (vc-find-root dir-locals-path ".git")))
+	(when vc-root
+	  ;; If the directory is under version control
+	  (let ((vc-ignore-file (vc-call-backend 'Git 'find-ignore-file vc-root)))
+	    (if (apply 'string-equal (mapcar 'directory-file-name (mapcar 'file-truename (list vc-root library-root))))
+		;; If the vc-root is the same as the library root, don't ask any questions
+		(vc-ignore ".dir-locals.el")
+	      ;; Otherwise prompt to ignore
+	      (when (y-or-n-p (format "Ignore .dir-locals.el in repo '%s' ?" vc-root))
+		(vc-ignore ".dir-locals.el"))))))))
 
   (defun rlbr/get-python-executable ()
     (read-file-name "Python interpreter to use: " (file-name-directory (executable-find "python"))
