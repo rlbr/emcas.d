@@ -1,14 +1,14 @@
 * Editing
+** IEdit mode
+#+BEGIN_SRC emacs-lisp
+  (use-package iedit
+    :bind ("C-;" . iedit-mode))
+#+END_SRC
 ** Imenu
 #+BEGIN_SRC emacs-lisp
   (use-package imenu
     :bind
     ("C-S-s" . imenu))
-#+END_SRC
-** IEdit mode
-#+BEGIN_SRC emacs-lisp
-  (use-package iedit
-    :bind ("C-;" . iedit-mode))
 #+END_SRC
 ** Spellcheck
 #+BEGIN_SRC emacs-lisp
@@ -210,7 +210,6 @@ This handy function is a customized ripoff of custom-save-all
 #+BEGIN_SRC emacs-lisp
   (use-package autodisass-java-bytecode
     :defer t)
-
   (use-package meghanada
     :if (rlbr/high-mem (* 512 1024))
     :defer t
@@ -220,7 +219,6 @@ This handy function is a customized ripoff of custom-save-all
 		(meghanada-mode t)
 		(flycheck-mode +1)
 		(add-hook 'before-save-hook 'meghanada-code-beautify-before-save)))
-
     :config
     (setq indent-tabs-mode nil)
     (setq meghanada-server-remote-debug t)
@@ -246,22 +244,18 @@ This handy function is a customized ripoff of custom-save-all
   "
       ("f" meghanada-compile-file)
       ("m" meghanada-restart)
-
       ("c" meghanada-compile-project)
       ("o" meghanada-optimize-import)
       ("s" meghanada-switch-test-case)
       ("v" meghanada-local-variable)
       ("i" meghanada-import-all)
-
       ("g" magit-status)
-
       ("t" meghanada-run-task)
       ("T" meghanada-typeinfo)
       ("j" meghanada-run-junit-test-case)
       ("J" meghanada-run-junit-class)
       ("R" meghanada-run-junit-recent)
       ("r" meghanada-reference)
-
       ("q" exit)
       ("z" nil "leave"))
     :bind
@@ -363,7 +357,6 @@ put executables in elpy-rpc-venv in path
 	  name
 	(string-join (list name (number-to-string number))
 		     "~"))))
-
   (defun rlbr/split-venv-with-number (name-number)
     "Split a virtualenv name with either a ~ seperating the name and the number, or nothing"
     (let ((split-result (split-string name-number (regexp-quote "~")))
@@ -382,7 +375,6 @@ put executables in elpy-rpc-venv in path
 	    (car (last split-result)))
 	   ret)))
       ret))
-
   (defun rlbr/get-venv-name (&optional library-root)
     "Generate venv name based off of the base-name of the library root"
     (file-name-base
@@ -390,7 +382,6 @@ put executables in elpy-rpc-venv in path
       (if library-root
 	  library-root
 	(elpy-library-root)))))
-
   (defun rlbr/handle-name-conflicts (venv-name)
     "Deal with potential name conflicts in venv"
     (let ((venv-conflicts)
@@ -405,7 +396,6 @@ put executables in elpy-rpc-venv in path
       (when venv-conflicts
 	(setcar venv-partition-name (1+ (apply 'max (mapcar #'car venv-conflicts)))))
       (rlbr/join-venv-with-number venv-partition-name)))
-
   (require 'vc)
   (defun rlbr/setup-python-venv-dirlocals (&optional library-root venv-name)
     "Setup .dir-locals file in library root and tell vc system to ignore .dir-locals file"
@@ -428,16 +418,13 @@ put executables in elpy-rpc-venv in path
 	      ;; Otherwise prompt to ignore
 	      (when (y-or-n-p (format "Ignore .dir-locals.el in repo '%s' ?" vc-root))
 		(vc-ignore ".dir-locals.el"))))))))
-
   (defun rlbr/get-python-executable ()
     (read-file-name "Python interpreter to use: " (file-name-directory (executable-find "python"))
 		    nil nil "python"))
-
   (defun emacs-default-venv ()
     (unless (member "emacs-default-venv" (pyvenv-virtualenv-list))
       (pyvenv-create "emacs-default-venv" (rlbr/get-python-executable)))
     "emacs-default-venv")
-
   (defun rlbr/init-python-venv-in-library-root (&optional library-root)
     "Prompt to either create one or use default" (let ((venv-name (rlbr/get-venv-name))
 						       (library-root (if library-root library-root (elpy-library-root))))
