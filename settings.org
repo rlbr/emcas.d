@@ -14,6 +14,28 @@
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-!") 'ispell-buffer)
 #+END_SRC
+** String inflection
+#+BEGIN_SRC emacs-lisp
+  (use-package string-inflection
+    :bind ("C-M-," . my-string-inflection-cycle-auto)
+    :config
+    (defun my-string-inflection-cycle-auto ()
+      "switching by major-mode"
+      (interactive)
+      (cond
+       ;; for emacs-lisp-mode
+       ((eq major-mode 'emacs-lisp-mode)
+	(string-inflection-all-cycle))
+       ;; for python
+       ((eq major-mode 'python-mode)
+	(string-inflection-python-style-cycle))
+       ;; for java
+       ((eq major-mode 'java-mode)
+	(string-inflection-java-style-cycle))
+       (t
+	;; default
+	(string-inflection-ruby-style-cycle)))))
+#+END_SRC
 ** Undo tree
 #+BEGIN_SRC emacs-lisp
   (use-package undo-tree
