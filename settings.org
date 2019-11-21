@@ -129,6 +129,17 @@ This handy function is a customized ripoff of custom-save-all
     (interactive)
     (kill-buffer (current-buffer)))
 #+END_SRC
+** Prefix arg overload
+#+BEGIN_SRC emacs-lisp
+  (defun rlbr/prefix-arg-overload (func alt &optional alt-args)
+    (let ((advice `(lambda (func &optional arg)
+		     (interactive "P")
+		     (if arg (apply (quote ,alt)
+				    ,alt-args)
+		       (apply func nil)))))
+      (advice-add func :around advice)
+      advice))
+#+END_SRC
 * Save/load
 ** Backup/auto-save
 #+BEGIN_SRC emacs-lisp
@@ -528,10 +539,13 @@ put executables in elpy-rpc-venv in path
     (use-package elpy
       :hook (hack-local-variables . rlbr/init-venv)
       :bind (:map python-mode-map
-		  (("C-=" . elpy-goto-assignment)))
+		  (("C-=" . elpy-goto-assignment)
+		   ("M-." . elpy-goto-definition)))
       :config
       (when (require 'flycheck nil t)
 	(setq elpy-modules (delq 'elpy-module-flymake elpy-modules)))
+      (rlbr/prefix-arg-overload 'elpy-goto-definition 'elpy-goto-definition-other-window)
+      (rlbr/prefix-arg-overload 'elpy-goto-assignment 'elpy-goto-assignment-other-window)
       (rlbr/elpy-append-to-path)
       (rlbr/fix-for-android))
     (use-package realgud
