@@ -43,6 +43,19 @@
     (global-undo-tree-mode))
 #+END_SRC
 * Added functionality
+** Kill this buffer
+#+BEGIN_SRC emacs-lisp
+  (defun rlbr/kill-this-buffer ()
+    (interactive)
+    (kill-buffer (current-buffer)))
+#+END_SRC
+** Low memeory check
+#+BEGIN_SRC emacs-lisp
+  (defun rlbr/high-mem (&optional threshold)
+    (let ((threshold (or threshold (expt 1024 2)))))
+    (>= (nth 1 (memory-info))
+	threshold))
+#+END_SRC
 ** Multiline sexp with symbol
 Jump to symbol, go up list, lispy-multiline. Great for diff-friendly custom
 #+BEGIN_SRC emacs-lisp
@@ -86,6 +99,17 @@ Run command for each matching exe and see if output-p is true when fed the comma
 	  (setq failed t)))
       output))
 #+END_SRC
+** Prefix arg overload
+#+BEGIN_SRC emacs-lisp
+  (defun rlbr/prefix-arg-overload (func alt &optional alt-args)
+    (let ((advice `(lambda (func &optional arg)
+		     (interactive "P")
+		     (if arg (apply (quote ,alt)
+				    ,alt-args)
+		       (apply func nil)))))
+      (advice-add func :around advice)
+      advice))
+#+END_SRC
 ** Save buffer-output to file
 This handy function is a customized ripoff of custom-save-all
 #+BEGIN_SRC emacs-lisp
@@ -115,30 +139,6 @@ This handy function is a customized ripoff of custom-save-all
 	(if old-buffer (progn (set-visited-file-name old-buffer-name)
 			      (set-buffer-modified-p nil))
 	  (kill-buffer (current-buffer))))))
-#+END_SRC
-** Low memeory check
-#+BEGIN_SRC emacs-lisp
-  (defun rlbr/high-mem (&optional threshold)
-    (let ((threshold (or threshold (expt 1024 2)))))
-    (>= (nth 1 (memory-info))
-	threshold))
-#+END_SRC
-** Kill this buffer
-#+BEGIN_SRC emacs-lisp
-  (defun rlbr/kill-this-buffer ()
-    (interactive)
-    (kill-buffer (current-buffer)))
-#+END_SRC
-** Prefix arg overload
-#+BEGIN_SRC emacs-lisp
-  (defun rlbr/prefix-arg-overload (func alt &optional alt-args)
-    (let ((advice `(lambda (func &optional arg)
-		     (interactive "P")
-		     (if arg (apply (quote ,alt)
-				    ,alt-args)
-		       (apply func nil)))))
-      (advice-add func :around advice)
-      advice))
 #+END_SRC
 * Save/load
 ** Backup/auto-save
@@ -578,19 +578,13 @@ put executables in elpy-rpc-venv in path
     :mode "\\.yml\\'")
 #+END_SRC
 * Minor modes/misc
-** Kill the things
-*** Buffer
+** Better shell
 #+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "C-x k") 'rlbr/kill-this-buffer)
-#+END_SRC
-*** Emacs
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-x C-k C-x C-k") 'save-buffers-kill-emacs)
-#+END_SRC
-** Lispy
-#+BEGIN_SRC emacs-lisp
-  (use-package lispy
-    :hook ((emacs-lisp-mode) . lispy-mode))
+  (use-package better-shell
+    :bind
+    (("C-M-;" . better-shell-shell)
+     ("C-M-:" . better-shell-remote-open)
+     ("C-#" . better-shell-sudo-here)))
 #+END_SRC
 ** Custom custom
 #+BEGIN_SRC emacs-lisp
@@ -604,13 +598,19 @@ put executables in elpy-rpc-venv in path
     :config
     (elmacro-mode +1))
 #+END_SRC
-** Better shell
+** Kill the things
+*** Buffer
 #+BEGIN_SRC emacs-lisp
-  (use-package better-shell
-    :bind
-    (("C-M-;" . better-shell-shell)
-     ("C-M-:" . better-shell-remote-open)
-     ("C-#" . better-shell-sudo-here)))
+(global-set-key (kbd "C-x k") 'rlbr/kill-this-buffer)
+#+END_SRC
+*** Emacs
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-x C-k C-x C-k") 'save-buffers-kill-emacs)
+#+END_SRC
+** Lispy
+#+BEGIN_SRC emacs-lisp
+  (use-package lispy
+    :hook ((emacs-lisp-mode) . lispy-mode))
 #+END_SRC
 * Navigation/auto-completion
 ** Ace window
@@ -657,12 +657,6 @@ put executables in elpy-rpc-venv in path
     (ivy-mode))
 #+END_SRC
 * Look and feel
-** Theme
-#+BEGIN_SRC emacs-lisp
-  (use-package dracula-theme
-    :config
-    (load-theme 'dracula t))
-#+END_SRC
 ** Line numbers
 #+BEGIN_SRC emacs-lisp
   (global-display-line-numbers-mode)
@@ -690,4 +684,10 @@ put executables in elpy-rpc-venv in path
 		     ("M-8" . winum-select-window-8))))
     (spaceline-spacemacs-theme)
     (winum-mode))
+#+END_SRC
+** Theme
+#+BEGIN_SRC emacs-lisp
+  (use-package dracula-theme
+    :config
+    (load-theme 'dracula t))
 #+END_SRC
