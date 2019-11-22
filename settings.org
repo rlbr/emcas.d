@@ -691,3 +691,16 @@ put executables in elpy-rpc-venv in path
     :config
     (load-theme 'dracula t))
 #+END_SRC
+* Clipboard manager
+** Browse kill ring settings
+#+BEGIN_SRC emacs-lisp
+  (use-package browse-kill-ring
+    :config
+    (browse-kill-ring-default-keybindings))
+#+END_SRC
+** Clipmon settings
+#+BEGIN_SRC emacs-lisp
+  (use-package clipmon
+    :hook ((after-init . clipmon-mode-start)
+	   (after-init . clipmon-persist)))
+#+END_SRC

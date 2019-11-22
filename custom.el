@@ -53,6 +53,7 @@
  '(ibuffer-show-empty-filter-groups
    nil)
  '(inhibit-startup-screen t)
+ '(kill-ring-max 500)
  '(magit-status-sections-hook
    (quote
     (magit-insert-status-headers
