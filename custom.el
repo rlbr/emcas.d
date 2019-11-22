@@ -10,6 +10,7 @@
  '(backup-directory-alist
    (quote
     ((".*" . "~/.emacs.d/backup"))))
+ '(company-show-numbers t)
  '(delete-by-moving-to-trash t)
  '(dired-listing-switches "-alh")
  '(elpy-eldoc-show-current-function
