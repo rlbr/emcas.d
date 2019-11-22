@@ -161,6 +161,10 @@
 	       :weight normal
 	       :height 113
 	       :width normal))))
+ '(company-tooltip-search
+   ((t
+     (:background "#f1fa8c"
+		  :foreground "dark gray"))))
  '(line-number-current-line
    ((t
      (:foreground "yellow"
