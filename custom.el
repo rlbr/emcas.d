@@ -74,7 +74,12 @@
      magit-insert-unpulled-from-pushremote
      magit-insert-unpulled-from-upstream)))
  '(menu-bar-mode nil)
+ '(org-goto-interface
+   (quote
+    outline-path-completionp))
  '(org-imenu-depth 5)
+ '(org-outline-path-complete-in-steps
+   nil)
  '(package-selected-packages
    (quote
     (ibuffer-tramp
