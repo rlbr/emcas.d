@@ -17,6 +17,7 @@
  '(dired-listing-switches "-alh")
  '(elpy-eldoc-show-current-function
    nil)
+ '(elpy-rpc-timeout 4)
  '(explicit-shell-file-name
    "/bin/bash")
  '(find-file-suppress-same-file-warnings
