@@ -10,6 +10,8 @@
  '(backup-directory-alist
    (quote
     ((".*" . "~/.emacs.d/backup"))))
+ '(browse-kill-ring-display-duplicates
+   nil)
  '(company-show-numbers t)
  '(delete-by-moving-to-trash t)
  '(dired-listing-switches "-alh")
