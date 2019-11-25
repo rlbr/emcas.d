@@ -222,6 +222,11 @@ This handy function is a customized ripoff of custom-save-all
 		       (rlbr/add-config-to-tramp (rx "/" (or "scp" "ssh") (zero-or-one "x") ":" "termux" (zero-or-more any) ":") android-config)))
 #+END_SRC
 * Major modes
+** Assembly
+#+BEGIN_SRC emacs-lisp
+  (use-package asm-mode
+    :mode (rx ".sim" eos))
+#+END_SRC
 ** C
 #+BEGIN_SRC emacs-lisp
   (use-package format-all
