@@ -14,7 +14,8 @@
    nil)
  '(company-show-numbers t)
  '(delete-by-moving-to-trash t)
- '(dired-listing-switches "-alh")
+ '(dired-listing-switches
+   "-alhv")
  '(elpy-eldoc-show-current-function
    nil)
  '(elpy-rpc-timeout 4)
