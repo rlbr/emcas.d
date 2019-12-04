@@ -79,6 +79,8 @@
      magit-insert-unpulled-from-pushremote
      magit-insert-unpulled-from-upstream)))
  '(menu-bar-mode nil)
+ '(org-export-with-sub-superscripts
+   (quote {}))
  '(org-goto-interface
    (quote
     outline-path-completionp))
