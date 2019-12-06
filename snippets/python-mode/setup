@@ -1,0 +1,19 @@
+# -*- mode: snippet -*-
+# name: setup
+# key: setup.py
+# --
+from setuptools import setup, find_packages
+
+with open("requirements.txt") as file:
+    INSTALL_REQUIRES = file.read().rstrip().split("\n")
+
+setup(
+    name="${1:PackageName}",
+    version="${2:Version}",
+    description="${3:Description}",
+    install_requires=INSTALL_REQUIRES,
+    author="${4:Raphael Roberts}",
+    author_email="${5:raphael.roberts48@gmail.com}",
+    packages=find_packages(),
+    $0
+)
