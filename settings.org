@@ -718,7 +718,7 @@ put executables in elpy-rpc-venv in path
 ** Clipmon settings
 #+BEGIN_SRC emacs-lisp
   (use-package clipmon
-    :if (display-graphic-p)
+    :if (or (eq system-type 'windows-nt) (member "X11" (split-string system-configuration-features " ")))
     :hook ((after-init . clipmon-mode-start)
 	   (after-init . clipmon-persist)))
 #+END_SRC
