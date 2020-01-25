@@ -555,7 +555,8 @@ put executables in elpy-rpc-venv in path
       (rlbr/prefix-arg-overload 'elpy-goto-definition 'elpy-goto-definition-other-window)
       (rlbr/prefix-arg-overload 'elpy-goto-assignment 'elpy-goto-assignment-other-window)
       (rlbr/elpy-append-to-path)
-      (rlbr/fix-for-android))
+      (rlbr/fix-for-android)
+      (pyvenv-tracking-mode))
     (use-package realgud
       :bind (:map python-mode-map
 		  (("C-c d b" . realgud:pdb))))
