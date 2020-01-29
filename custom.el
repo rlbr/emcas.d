@@ -89,7 +89,8 @@
    nil)
  '(package-selected-packages
    (quote
-    (ibuffer-tramp
+    (counsel
+     ibuffer-tramp
      dockerfile-mode
      docker
      docker-compose-mode
@@ -123,7 +124,6 @@
      browse-kill-ring
      clipmon
      free-keys
-     org-link-minor-mode
      js2-mode
      js2-refactor
      xref-js2
