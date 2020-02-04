@@ -97,7 +97,8 @@
    nil)
  '(package-selected-packages
    (quote
-    (paradox
+    (diminish
+     paradox
      smart-mode-line-atom-one-dark-theme
      counsel
      ibuffer-tramp

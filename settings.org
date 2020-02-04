@@ -48,6 +48,7 @@
 ** Undo tree
 #+BEGIN_SRC emacs-lisp
   (use-package undo-tree
+    :diminish
     :config
     (global-undo-tree-mode))
 #+END_SRC
@@ -612,6 +613,7 @@ put executables in elpy-rpc-venv in path
 ** Elmacro
 #+BEGIN_SRC emacs-lisp
   (use-package elmacro
+    :diminish
     :demand
     :config
     (elmacro-mode +1))
@@ -669,7 +671,10 @@ put executables in elpy-rpc-venv in path
 ** Ivy
 #+BEGIN_SRC emacs-lisp
   (use-package ivy
+    :diminish
     :config
+    (use-package counsel
+      :diminish)
     (use-package swiper
       :bind ("C-s" . swiper))
     (ivy-mode)
