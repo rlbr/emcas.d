@@ -1,4 +1,13 @@
 * Editing
+** Enable disabled commands
+#+BEGIN_SRC emacs-lisp
+  (put 'set-goal-column 'disabled nil)
+  (put 'narrow-to-region 'disabled nil)
+  (put 'upcase-region 'disabled nil)
+  (put 'downcase-region 'disabled nil)
+  (put 'scroll-left 'disabled nil)
+  (put 'erase-buffer 'disabled nil)
+#+END_SRC
 ** IEdit mode
 #+BEGIN_SRC emacs-lisp
   (use-package iedit
