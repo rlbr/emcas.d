@@ -689,7 +689,20 @@ put executables in elpy-rpc-venv in path
 ** Smart mode line
 #+BEGIN_SRC emacs-lisp
   (use-package smart-mode-line
-    :config (use-package winum
+    :init
+    (winum-mode 1)
+    :config
+    (sml/setup))
+#+END_SRC
+** Theme
+#+BEGIN_SRC emacs-lisp
+  (use-package dracula-theme
+    :config
+    (load-theme 'dracula t))
+#+END_SRC
+** Winum-mode
+#+BEGIN_SRC emacs-lisp
+(use-package winum
               :bind
               (:map winum-keymap
                     (("M-0" . winum-select-window-0-or-10)
@@ -701,15 +714,6 @@ put executables in elpy-rpc-venv in path
                      ("M-6" . winum-select-window-6)
                      ("M-7" . winum-select-window-7)
                      ("M-8" . winum-select-window-8))))
-    (use-package winum
-      :config (winum-mode))
-    (sml/setup))
-#+END_SRC
-** Theme
-#+BEGIN_SRC emacs-lisp
-  (use-package dracula-theme
-    :config
-    (load-theme 'dracula t))
 #+END_SRC
 * Clipboard manager
 ** Browse kill ring settings
