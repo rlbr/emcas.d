@@ -638,6 +638,12 @@ put executables in elpy-rpc-venv in path
   (use-package ace-window
     :bind (("M-Q" . ace-window)))
 #+END_SRC
+** Disable Ido
+#+BEGIN_SRC emacs-lisp
+  (use-package ido
+    :config
+    (ido-mode -1))
+#+END_SRC
 ** Hippie expand
 #+BEGIN_SRC emacs-lisp
   (use-package hippie-exp
