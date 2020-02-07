@@ -131,7 +131,6 @@
      cython-mode
      dired-narrow
      lua-mode
-     browse-kill-ring
      clipmon
      free-keys
      js2-mode

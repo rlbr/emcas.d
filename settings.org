@@ -727,24 +727,6 @@ put executables in elpy-rpc-venv in path
                      ("M-8" . winum-select-window-8))))
 #+END_SRC
 * Clipboard manager
-** Browse kill ring settings
-#+BEGIN_SRC emacs-lisp
-  (use-package browse-kill-ring
-    :defer nil
-    :bind
-    (:map browse-kill-ring-mode-map
-	  ("c" . rlbr/update-sys-clipboard-move-to-top))
-    :config
-    (defun rlbr/update-sys-clipboard-move-to-top (&optional quit)
-      "Move the entry to the front." (interactive "P")
-      (let ((buf (current-buffer))
-	    (pt (point)))
-	(let ((str (browse-kill-ring-current-string buf pt)))
-	  (browse-kill-ring-delete)
-	  (kill-new str)))
-      (unless quit (browse-kill-ring-update)))
-    (browse-kill-ring-default-keybindings))
-#+END_SRC
 ** Clipmon settings
 #+BEGIN_SRC emacs-lisp
   (use-package clipmon
