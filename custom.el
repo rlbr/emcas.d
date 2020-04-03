@@ -97,7 +97,8 @@
    nil)
  '(package-selected-packages
    (quote
-    (diminish
+    (plantuml-mode
+     diminish
      paradox
      smart-mode-line-atom-one-dark-theme
      counsel
