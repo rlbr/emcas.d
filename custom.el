@@ -160,6 +160,7 @@
  '(scroll-bar-mode nil)
  '(sml/theme
    (quote atom-one-dark))
+ '(tab-width 4)
  '(tool-bar-mode nil)
  '(tramp-use-ssh-controlmaster-options
    nil
