@@ -345,6 +345,17 @@ This handy function is a customized ripoff of custom-save-all
 	   (xref-find-definitions (xref-backend-identifier-at-point (xref-find-backend)))))))
     (define-key js-mode-map (kbd "M-.") #'rlbr/jump-to-definition))
 #+END_SRC
+** JSON
+#+BEGIN_SRC emacs-lisp
+  (use-package json
+    :config
+    (use-package json-mode
+      :bind (:map json-mode-map
+                  ("C-c p p" . json-pretty-print-buffer-ordered)))
+    (use-package json-reformat
+      :config
+      (setq json-encoding-default-indentation (make-string json-reformat:indent-width ? ))))
+#+END_SRC
 ** Lisp
 *** Emacs lisp
 #+BEGIN_SRC emacs-lisp
