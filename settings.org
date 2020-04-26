@@ -231,6 +231,14 @@ This handy function is a customized ripoff of custom-save-all
 						   "remote-path" (append (mapcar 'expand-file-name '("home/.local/bin" "usr/bin" "usr/bin/applets")) '("/sbin" "/vendor/bin" "/system/sbin" "/system/bin" "/system/xbin"))))))
 		       (rlbr/add-config-to-tramp (rx "/" (or "scp" "ssh") (zero-or-one "x") ":" "termux" (zero-or-more any) ":") android-config)))
 #+END_SRC
+** Dired rysnc
+#+BEGIN_SRC emacs-lisp
+  (use-package dired
+    :bind
+    (:map dired-mode-map
+          ("C-c C-r" . dired-rsync))
+    :config (use-package dired-rsync))
+#+END_SRC
 * Major modes
 ** Assembly
 #+BEGIN_SRC emacs-lisp

@@ -119,7 +119,8 @@
      ("bash" . sh))))
  '(package-selected-packages
    (quote
-    (projectile
+    (dired-rsync
+     projectile
      plantuml-mode
      shift-number
      number
