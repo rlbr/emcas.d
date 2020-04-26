@@ -119,7 +119,10 @@
      ("bash" . sh))))
  '(package-selected-packages
    (quote
-    (plantuml-mode
+    (projectile
+     plantuml-mode
+     shift-number
+     number
      diminish
      paradox
      smart-mode-line-atom-one-dark-theme
