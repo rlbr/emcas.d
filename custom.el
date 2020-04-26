@@ -87,6 +87,13 @@
      magit-insert-unpulled-from-pushremote
      magit-insert-unpulled-from-upstream)))
  '(menu-bar-mode nil)
+ '(org-babel-load-languages
+   (quote
+    ((emacs-lisp . t)
+     (python . t)
+     (shell . t))))
+ '(org-babel-tangle-comment-format-beg
+   "file:%file::%start-line")
  '(org-export-with-sub-superscripts
    (quote {}))
  '(org-goto-interface
@@ -95,6 +102,21 @@
  '(org-imenu-depth 5)
  '(org-outline-path-complete-in-steps
    nil)
+ '(org-src-lang-modes
+   (quote
+    (("ocaml" . tuareg)
+     ("elisp" . emacs-lisp)
+     ("ditaa" . artist)
+     ("asymptote" . asy)
+     ("dot" . fundamental)
+     ("sqlite" . sql)
+     ("calc" . fundamental)
+     ("C" . c)
+     ("cpp" . c++)
+     ("C++" . c++)
+     ("screen" . shell-script)
+     ("shell" . sh)
+     ("bash" . sh))))
  '(package-selected-packages
    (quote
     (plantuml-mode
