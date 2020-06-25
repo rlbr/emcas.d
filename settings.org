@@ -620,9 +620,9 @@ put executables in elpy-rpc-venv in path
 #+BEGIN_SRC emacs-lisp
   (use-package better-shell
     :bind
-    (("C-M-;" . better-shell-shell)
-     ("C-M-:" . better-shell-remote-open)
-     ("C-#" . better-shell-sudo-here)))
+    (("M-V l" . better-shell-shell)
+     ("M-V r" . better-shell-remote-open)
+     ("M-V s" . better-shell-sudo-here)))
 #+END_SRC
 ** Custom custom
 #+BEGIN_SRC emacs-lisp
