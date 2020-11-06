@@ -175,6 +175,24 @@ This handy function is a customized ripoff of custom-save-all
     :config
     (recentf-mode 1))
 #+end_src
+** Automode priority
+#+begin_src emacs-lisp
+  (add-to-list 'after-settings-load-hooks
+               '(progn
+                 (setq rlbr/mode-priority-list
+                       (list
+                        'docker-compose-mode))
+
+                 (defun rlbr/move-to-top (priority alist)
+                   (let ((ret-alist (copy-sequence alist))
+                         (cons-pair))
+                     (dolist (to-move (reverse priority)
+                                      ret-alist)
+                       (if (setq cons-pair (rassq to-move ret-alist))
+                           (progn (delete cons-pair ret-alist)
+                                  (setq ret-alist (cons cons-pair ret-alist)))))))
+                 (setq auto-mode-alist (rlbr/move-to-top rlbr/mode-priority-list auto-mode-alist))))
+#+end_src
 * Platform dependent
 ** Windows
 #+begin_src emacs-lisp
