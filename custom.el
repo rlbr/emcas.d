@@ -4,24 +4,21 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(auto-save-file-name-transforms
-   (quote
-    ((".*" "~/.emacs.d/autosave/" t))))
+   '((".*" "~/.emacs.d/autosave/" t)))
  '(aw-dispatch-when-more-than 1)
  '(backup-directory-alist
-   (quote
-    ((".*" . "~/.emacs.d/backup"))))
+   '((".*" . "~/.emacs.d/backup")))
  '(browse-kill-ring-display-duplicates
    nil)
  '(company-show-numbers t)
  '(custom-safe-themes
-   (quote
-    ("60940e1f2fa3f4e61e7a7ed9bab9c22676aa25f927d5915c8f0fa3a8bf529821"
+   '("60940e1f2fa3f4e61e7a7ed9bab9c22676aa25f927d5915c8f0fa3a8bf529821"
      "b9e9ba5aeedcc5ba8be99f1cc9301f6679912910ff92fdf7980929c2fc83ab4d"
      "84d2f9eeb3f82d619ca4bfffe5f157282f4779732f48a5ac1484d94d5ff5b279"
      "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223"
      "855eb24c0ea67e3b64d5d07730b96908bac6f4cd1e5a5986493cbac45e9d9636"
      "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa"
-     default)))
+     default))
  '(delete-by-moving-to-trash t)
  '(dired-listing-switches
    "-alhv")
@@ -33,8 +30,7 @@
  '(find-file-suppress-same-file-warnings
    t)
  '(hippie-expand-try-functions-list
-   (quote
-    (try-expand-dabbrev
+   '(try-expand-dabbrev
      try-expand-dabbrev-all-buffers
      try-expand-dabbrev-from-kill
      try-complete-file-name-partially
@@ -43,11 +39,10 @@
      try-expand-list
      try-expand-line
      try-complete-lisp-symbol-partially
-     try-complete-lisp-symbol)))
+     try-complete-lisp-symbol))
  '(ibuffer-expert t)
  '(ibuffer-formats
-   (quote
-    ((mark
+   '((mark
       modified
       read-only
       locked
@@ -63,14 +58,13 @@
       " "
       (name 16 -1)
       " "
-      filename))))
+      filename)))
  '(ibuffer-show-empty-filter-groups
    nil)
  '(inhibit-startup-screen t)
  '(kill-ring-max 500)
  '(magit-status-sections-hook
-   (quote
-    (magit-insert-status-headers
+   '(magit-insert-status-headers
      magit-insert-merge-log
      magit-insert-rebase-sequence
      magit-insert-am-sequence
@@ -86,26 +80,23 @@
      magit-insert-unpushed-to-pushremote
      magit-insert-unpushed-to-upstream-or-recent
      magit-insert-unpulled-from-pushremote
-     magit-insert-unpulled-from-upstream)))
+     magit-insert-unpulled-from-upstream))
  '(menu-bar-mode nil)
  '(org-babel-load-languages
-   (quote
-    ((emacs-lisp . t)
+   '((emacs-lisp . t)
      (python . t)
-     (shell . t))))
+     (shell . t)))
  '(org-babel-tangle-comment-format-beg
    "file:%file::%start-line")
  '(org-export-with-sub-superscripts
-   (quote {}))
+   '{})
  '(org-goto-interface
-   (quote
-    outline-path-completionp))
+   'outline-path-completionp)
  '(org-imenu-depth 5)
  '(org-outline-path-complete-in-steps
    nil)
  '(org-src-lang-modes
-   (quote
-    (("ocaml" . tuareg)
+   '(("ocaml" . tuareg)
      ("elisp" . emacs-lisp)
      ("ditaa" . artist)
      ("asymptote" . asy)
@@ -117,10 +108,9 @@
      ("C++" . c++)
      ("screen" . shell-script)
      ("shell" . sh)
-     ("bash" . sh))))
+     ("bash" . sh)))
  '(package-selected-packages
-   (quote
-    (dired-rsync
+   '(dired-rsync
      projectile
      plantuml-mode
      shift-number
@@ -180,14 +170,13 @@
      yaml-mode
      apache-mode
      web-mode
-     undo-tree)))
+     undo-tree))
  '(python-check-command "flake8")
- '(reb-re-syntax (quote string))
+ '(reb-re-syntax 'string)
  '(safe-local-variable-values
-   (quote ((project-venv))))
+   '((project-venv)))
  '(scroll-bar-mode nil)
- '(sml/theme
-   (quote atom-one-dark))
+ '(sml/theme 'atom-one-dark)
  '(tab-width 4)
  '(tool-bar-mode nil)
  '(tramp-use-ssh-controlmaster-options
