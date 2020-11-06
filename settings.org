@@ -1,30 +1,30 @@
 * Editing
 ** Enable disabled commands
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (put 'set-goal-column 'disabled nil)
   (put 'narrow-to-region 'disabled nil)
   (put 'upcase-region 'disabled nil)
   (put 'downcase-region 'disabled nil)
   (put 'scroll-left 'disabled nil)
   (put 'erase-buffer 'disabled nil)
-#+END_SRC
+#+end_src
 ** IEdit mode
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package iedit
     :bind ("C-;" . iedit-mode))
-#+END_SRC
+#+end_src
 ** Imenu
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package imenu
     :bind
     ("C-S-s" . imenu))
-#+END_SRC
+#+end_src
 ** Spellcheck
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (global-set-key (kbd "C-!") 'ispell-buffer)
-#+END_SRC
+#+end_src
 ** String inflection
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package string-inflection
     :bind ("C-M-," . my-string-inflection-cycle-auto)
     :config
@@ -44,31 +44,31 @@
        (t
 	;; default
 	(string-inflection-ruby-style-cycle)))))
-#+END_SRC
+#+end_src
 ** Undo tree
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package undo-tree
     :diminish
     :config
     (global-undo-tree-mode))
-#+END_SRC
+#+end_src
 * Added functionality
 ** Kill this buffer
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (defun rlbr/kill-this-buffer ()
     (interactive)
     (kill-buffer (current-buffer)))
-#+END_SRC
+#+end_src
 ** Low memeory check
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (defun rlbr/high-mem (&optional threshold)
     (let ((threshold (or threshold (expt 1024 2)))))
     (>= (nth 1 (memory-info))
 	threshold))
-#+END_SRC
+#+end_src
 ** Multiline sexp with symbol
 Jump to symbol, go up list, lispy-multiline. Great for diff-friendly custom
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (require 'isearch)
   (require 'lispy)
   (defun rlbr/multiline-sexp-with-symbol (symbol-name)
@@ -77,10 +77,10 @@ Jump to symbol, go up list, lispy-multiline. Great for diff-friendly custom
       (search-forward-regexp (isearch-symbol-regexp symbol-name))
       (backward-up-list)
       (lispy-alt-multiline)))
-#+END_SRC
+#+end_src
 ** Output matches
 Run command for each matching exe and see if output-p is true when fed the command output
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (defun rlbr/output-matches (output-matches-p exe args)
     "locate the executable whose output satisfies output-matches-p when fed args and return the full-path"
     (let ((exec-path exec-path)
@@ -108,9 +108,9 @@ Run command for each matching exe and see if output-p is true when fed the comma
 				    exec-path)))))
 	  (setq failed t)))
       output))
-#+END_SRC
+#+end_src
 ** Prefix arg overload
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (defun rlbr/prefix-arg-overload (func alt &optional alt-args)
     (let ((advice `(lambda (func &optional arg)
 		     (interactive "P")
@@ -119,10 +119,10 @@ Run command for each matching exe and see if output-p is true when fed the comma
 		       (apply func nil)))))
       (advice-add func :around advice)
       advice))
-#+END_SRC
+#+end_src
 ** Save buffer-output to file
 This handy function is a customized ripoff of custom-save-all
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (defun rlbr/save-buffer-func-to-file (visit-file func args)
     "Rip off of custom-save-all"
     (let* ((filename visit-file)
@@ -149,10 +149,10 @@ This handy function is a customized ripoff of custom-save-all
 	(if old-buffer (progn (set-visited-file-name old-buffer-name)
 			      (set-buffer-modified-p nil))
 	  (kill-buffer (current-buffer))))))
-#+END_SRC
+#+end_src
 * Save/load
 ** Backup/auto-save
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (let ((backup-dir "~/.emacs.d/backup")
 	(auto-save-dir "~/.emacs.d/autosave"))
     (if (not (file-directory-p backup-dir))
@@ -160,20 +160,20 @@ This handy function is a customized ripoff of custom-save-all
     (if (not (file-directory-p
 	      auto-save-dir))
 	(make-directory auto-save-dir)))
-#+END_SRC
+#+end_src
 ** On save
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (add-hook 'before-save-hook 'delete-trailing-whitespace)
-#+END_SRC
+#+end_src
 ** Recent files mode
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package recentf
     :config
     (recentf-mode 1))
-#+END_SRC
+#+end_src
 * Platform dependent
 ** Windows
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (when (string-equal system-type "windows-nt")
     (progn (defun rlbr/quote-exe (path)
 	     (w32-short-file-name path))
@@ -207,10 +207,10 @@ This handy function is a customized ripoff of custom-save-all
 						    (string-match "ls: .*'\\?/': No such file or directory" output))
 						  "ls" "?/"))
 		    (if ls (setq insert-directory-program (rlbr/quote-exe ls)))))))
-#+END_SRC
+#+end_src
 * Tramp configuration
 ** Tramp append plist to connection properties
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package kv
     :config
     (defun rlbr/add-config-to-tramp (matches-regexp config-plist)
@@ -219,9 +219,9 @@ This handy function is a customized ripoff of custom-save-all
 	  (let ((config (list matches-regexp (car pair)
 			      (cdr pair))))
 	    (add-to-list 'tramp-connection-properties config))))))
-#+END_SRC
+#+end_src
 ** Android
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package tramp
     :config
     (let ((android-config (let ((default-directory "/data/data/com.termux/files"))
@@ -230,40 +230,44 @@ This handy function is a customized ripoff of custom-save-all
 						   "remote-process-environment" (append (list (concat "PREFIX=" default-directory "usr")) tramp-remote-process-environment)
 						   "remote-path" (append (mapcar 'expand-file-name '("home/.local/bin" "usr/bin" "usr/bin/applets")) '("/sbin" "/vendor/bin" "/system/sbin" "/system/bin" "/system/xbin"))))))
 		       (rlbr/add-config-to-tramp (rx "/" (or "scp" "ssh") (zero-or-one "x") ":" "termux" (zero-or-more any) ":") android-config)))
-#+END_SRC
+#+end_src
 ** Dired rysnc
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package dired
     :bind
     (:map dired-mode-map
           ("C-c C-r" . dired-rsync))
     :config (use-package dired-rsync))
-#+END_SRC
+#+end_src
 * Major modes
 ** Assembly
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package asm-mode
     :mode (rx ".sim" eos))
-#+END_SRC
+#+end_src
 ** C
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package format-all
     :if (executable-find "clang-format")
     :hook (c-mode . format-all-mode))
-#+END_SRC
+#+end_src
 ** Docker
 *** Docker
 *** Dockerfile
 *** Docker-compose
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package docker-compose-mode
-    :mode (rx "docker-compose.yml" eos)
+    :config
+    ;; auto-mode hack
+    (let
+        ((docker-compose-mode-regex (rassq 'docker-compose-mode auto-mode-alist)))
+      (setq auto-mode-alist (cons docker-compose-mode-regex (rassq-delete-all 'docker-compose-mode auto-mode-alist))))
     :hook
     (docker-compose-mode . company-mode))
-#+END_SRC
+#+end_src
 ** Java
 *** Meghanada
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package autodisass-java-bytecode
     :defer t)
   (use-package meghanada
@@ -323,9 +327,9 @@ This handy function is a customized ripoff of custom-save-all
 	  ("C-z" . hydra-meghanada/body))
     :commands
     (meghanada-mode))
-#+END_SRC
+#+end_src
 ** JavaScript
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package js2-mode
     :mode "\\.js\\'"
     :hook ((js2-mode . js2-imenu-extras-mode)
@@ -352,9 +356,9 @@ This handy function is a customized ripoff of custom-save-all
 	     (xref-pop-marker-stack))
 	   (xref-find-definitions (xref-backend-identifier-at-point (xref-find-backend)))))))
     (define-key js-mode-map (kbd "M-.") #'rlbr/jump-to-definition))
-#+END_SRC
+#+end_src
 ** JSON
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package json
     :config
     (use-package json-mode
@@ -363,34 +367,34 @@ This handy function is a customized ripoff of custom-save-all
     (use-package json-reformat
       :config
       (setq json-encoding-default-indentation (make-string json-reformat:indent-width ? ))))
-#+END_SRC
+#+end_src
 ** Lisp
 *** Emacs lisp
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package elisp-mode
     :hook (emacs-lisp-mode . company-mode))
-#+END_SRC
+#+end_src
 ** Magit
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package magit
     :bind (("C-x g" . magit-status))
     :config
     (use-package git-commit
       :hook (git-commit-setup . git-commit-turn-on-flyspell)))
-#+END_SRC
+#+end_src
 ** Python
 *** Platform specific
 Set python command
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (setq elpy-rpc-python-command
 	(cond
 	 ((string-equal system-type "gnu/linux")
 	  "python3")
 	 ((string-equal system-type "windows-nt")
 	  "pythonw.exe")))
-#+END_SRC
+#+end_src
 put executables in elpy-rpc-venv in path
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (defun rlbr/elpy-append-to-path ()
     (setenv "PATH" (string-join (list (getenv "PATH")
 				      (let ((default-directory (elpy-rpc-get-or-create-virtualenv))
@@ -406,15 +410,15 @@ put executables in elpy-rpc-venv in path
 					(nconc exec-path (list elpy-binpath))
 					elpy-binpath))
 				path-separator)))
-#+END_SRC
-#+BEGIN_SRC emacs-lisp
+#+end_src
+#+begin_src emacs-lisp
   (defun rlbr/fix-for-android ()
     (unless (= 0 (call-process elpy-rpc-python-command nil nil nil "-c" "import multiprocessing;multiprocessing.Pool()"))
       (setq python-check-command
 	    (string-join `(,python-check-command "--jobs=1") " "))))
-#+END_SRC
+#+end_src
 *** Custom feature
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (defun rlbr/join-venv-with-number (number-name)
     "Join a list with a name and a number"
     (let
@@ -560,9 +564,9 @@ put executables in elpy-rpc-venv in path
 		    ;; If nothing has already set pyvenv-workon, create venv
 		    (setq-local pyvenv-workon (rlbr/init-python-venv-in-library-root))))))
       (pyvenv-workon pyvenv-workon)))
-#+END_SRC
+#+end_src
 *** Bindings/settings
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package python
     :hook
     ((python-mode . pyvenv-mode)
@@ -590,15 +594,15 @@ put executables in elpy-rpc-venv in path
       :bind (:map python-mode-map
 		  (("C-c d b" . realgud:pdb))))
     (elpy-enable))
-#+END_SRC
+#+end_src
 ** SSH config mode
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package ssh-config-mode
     :mode "~/.ssh/config\\'")
-#+END_SRC
+#+end_src
 ** Tramp
 ** Webmode
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package web-mode
     :mode
     (("\\.phtml\\'" . web-mode)
@@ -609,67 +613,67 @@ put executables in elpy-rpc-venv in path
      ("\\.mustache\\'" . web-mode)
      ("\\.djhtml\\'" . web-mode)
      ("\\.html?\\'" . web-mode)))
-#+END_SRC
+#+end_src
 ** YAML
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package yaml-mode
     :mode "\\.yml\\'")
-#+END_SRC
+#+end_src
 * Minor modes/misc
 ** Better shell
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package better-shell
     :bind
     (("M-V l" . better-shell-shell)
      ("M-V r" . better-shell-remote-open)
      ("M-V s" . better-shell-sudo-here)))
-#+END_SRC
+#+end_src
 ** Custom custom
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (advice-add 'custom-save-faces :after (lambda () (rlbr/multiline-sexp-with-symbol "custom-set-faces")))
   (advice-add 'custom-save-variables :after (lambda () (rlbr/multiline-sexp-with-symbol "custom-set-variables")))
-#+END_SRC
+#+end_src
 ** Elmacro
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package elmacro
     :diminish
     :demand
     :config
     (elmacro-mode +1))
-#+END_SRC
+#+end_src
 ** Kill the things
 *** Buffer
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (global-set-key (kbd "C-x k") 'rlbr/kill-this-buffer)
-#+END_SRC
+#+end_src
 *** Emacs
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (global-set-key (kbd "C-x C-k C-x C-k") 'save-buffers-kill-emacs)
-#+END_SRC
+#+end_src
 ** Lispy
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package lispy
     :hook ((emacs-lisp-mode) . lispy-mode))
-#+END_SRC
+#+end_src
 * Navigation/auto-completion
 ** Ace window
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package ace-window
     :bind (("M-Q" . ace-window)))
-#+END_SRC
+#+end_src
 ** Disable Ido
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package ido
     :config
     (ido-mode -1))
-#+END_SRC
+#+end_src
 ** Hippie expand
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package hippie-exp
     :bind ("M-/" . hippie-expand))
-#+END_SRC
+#+end_src
 ** IBuffer mode
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package ibbufer-vc
     :hook
     ((ibuffer-mode . ibuffer-vc-set-filter-groups-by-vc-root)))
@@ -692,9 +696,9 @@ put executables in elpy-rpc-venv in path
 		     (format "%7.1fk" (/ (buffer-size)
 					 1000.0)))
 		    (t (format "%8d" (buffer-size))))))
-#+END_SRC
+#+end_src
 ** Ivy
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package ivy
     :diminish
     :config
@@ -704,34 +708,34 @@ put executables in elpy-rpc-venv in path
       :bind ("C-s" . swiper))
     (ivy-mode)
     (counsel-mode))
-#+END_SRC
+#+end_src
 * Look and feel
 ** Line numbers
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (global-display-line-numbers-mode)
-#+END_SRC
+#+end_src
 ** Mode line bell
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package mode-line-bell
     :config
     (mode-line-bell-mode))
-#+END_SRC
+#+end_src
 ** Smart mode line
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package smart-mode-line
     :init
     (winum-mode 1)
     :config
     (sml/setup))
-#+END_SRC
+#+end_src
 ** Theme
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package dracula-theme
     :config
     (load-theme 'dracula t))
-#+END_SRC
+#+end_src
 ** Winum-mode
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package winum
               :bind
               (:map winum-keymap
@@ -744,12 +748,12 @@ put executables in elpy-rpc-venv in path
                      ("M-6" . winum-select-window-6)
                      ("M-7" . winum-select-window-7)
                      ("M-8" . winum-select-window-8))))
-#+END_SRC
+#+end_src
 * Clipboard manager
 ** Clipmon settings
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package clipmon
     :if (or (eq system-type 'windows-nt) (member "X11" (split-string system-configuration-features " ")))
     :hook ((after-init . clipmon-mode-start)
 	   (after-init . clipmon-persist)))
-#+END_SRC
+#+end_src
