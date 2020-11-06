@@ -1,3 +1,7 @@
+* Initial setup
+#+begin_src emacs-lisp
+  (setq after-settings-load-hooks (list t))
+#+end_src
 * Editing
 ** Enable disabled commands
 #+begin_src emacs-lisp
@@ -756,4 +760,8 @@ put executables in elpy-rpc-venv in path
     :if (or (eq system-type 'windows-nt) (member "X11" (split-string system-configuration-features " ")))
     :hook ((after-init . clipmon-mode-start)
 	   (after-init . clipmon-persist)))
+#+end_src
+* After-settings-load
+#+begin_src emacs-lisp
+  (mapcar (lambda (form) (eval form)) after-settings-load-hooks)
 #+end_src
