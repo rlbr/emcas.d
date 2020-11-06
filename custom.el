@@ -180,9 +180,7 @@
  '(tab-width 4)
  '(tool-bar-mode nil)
  '(tramp-use-ssh-controlmaster-options
-   nil
-   nil
-   (tramp))
+   nil)
  '(winum-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
