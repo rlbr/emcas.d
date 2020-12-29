@@ -1,0 +1,2 @@
+;;; Generated package description from /data/data/com.termux/files/home/.emacs.d/elpa/free-keys-1.0.0/free-keys.el  -*- no-byte-compile: t -*-
+(define-package "free-keys" "1.0.0" "Show free keybindings for modkeys or prefixes" '((cl-lib "0.3")) :commit "edfd69dc369b2647447b7c28c7c1163b1ddf45b4" :keywords '("convenience") :authors '(("Matus Goljer" . "matus.goljer@gmail.com")) :maintainer '("Matus Goljer" . "matus.goljer@gmail.com") :url "https://github.com/Fuco1/free-keys")

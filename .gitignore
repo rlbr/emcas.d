@@ -4,3 +4,5 @@
 !/custom.el
 !/snippets
 !/ssh-config-keywords.txt
+*.elc
+!/elpa

@@ -1,0 +1,2 @@
+;;; Generated package description from /data/data/com.termux/files/home/.emacs.d/elpa/shift-number-0.1/shift-number.el  -*- no-byte-compile: t -*-
+(define-package "shift-number" "0.1" "Increase/decrease the number at point" 'nil :commit "ba3c1f2e6b01bf14aa1433c2a49098af1c025f7c" :keywords '("convenience") :authors '(("Alex Kost" . "alezost@gmail.com")) :maintainer '("Alex Kost" . "alezost@gmail.com") :url "https://github.com/alezost/shift-number.el")
