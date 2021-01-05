@@ -15,7 +15,7 @@
 ** IEdit mode
 #+begin_src emacs-lisp
   (use-package iedit
-    :bind ("C-;" . iedit-mode))
+    :bind ("C-x j" . iedit-mode))
 #+end_src
 ** Imenu
 #+begin_src emacs-lisp
