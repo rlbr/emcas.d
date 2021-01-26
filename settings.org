@@ -617,6 +617,12 @@ put executables in elpy-rpc-venv in path
 		  (("C-c d b" . realgud:pdb))))
     (elpy-enable))
 #+end_src
+*** pip-requirements-mode
+#+begin_src emacs-lisp
+  (use-package pip-requirements-mode
+    :hook
+    (pip-requirements-mode . company-mode))
+#+end_src
 ** SSH config mode
 #+begin_src emacs-lisp
   (use-package ssh-config-mode
