@@ -12,7 +12,8 @@
    nil)
  '(company-show-numbers t)
  '(custom-safe-themes
-   '("60940e1f2fa3f4e61e7a7ed9bab9c22676aa25f927d5915c8f0fa3a8bf529821"
+   '("e29a6c66d4c383dbda21f48effe83a1c2a1058a17ac506d60889aba36685ed94"
+     "60940e1f2fa3f4e61e7a7ed9bab9c22676aa25f927d5915c8f0fa3a8bf529821"
      "b9e9ba5aeedcc5ba8be99f1cc9301f6679912910ff92fdf7980929c2fc83ab4d"
      "84d2f9eeb3f82d619ca4bfffe5f157282f4779732f48a5ac1484d94d5ff5b279"
      "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223"
@@ -66,7 +67,8 @@
  '(ibuffer-show-empty-filter-groups
    nil)
  '(iedit-toggle-key-default
-   "M-]")
+   "M-]"
+   t)
  '(inhibit-startup-screen t)
  '(kill-ring-max 500)
  '(magit-status-sections-hook
