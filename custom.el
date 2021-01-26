@@ -116,7 +116,9 @@
      ("shell" . sh)
      ("bash" . sh)))
  '(package-selected-packages
-   '(dired-rsync
+   '(meghanada
+     pip-requirements
+     dired-rsync
      projectile
      plantuml-mode
      shift-number
@@ -134,7 +136,6 @@
      realgud
      format-all
      autodisass-java-bytecode
-     meghanada
      elmacro
      ace-window
      winum
