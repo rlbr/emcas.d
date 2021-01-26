@@ -25,6 +25,10 @@
  '(elpy-eldoc-show-current-function
    nil)
  '(elpy-rpc-timeout 4)
+ '(elpy-test-pytest-runner-command
+   '("pytest"))
+ '(elpy-test-runner
+   'elpy-test-pytest-runner)
  '(explicit-shell-file-name
    "/bin/bash")
  '(find-file-suppress-same-file-warnings
