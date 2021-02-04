@@ -89,6 +89,8 @@
      magit-insert-unpushed-to-upstream-or-recent
      magit-insert-unpulled-from-pushremote
      magit-insert-unpulled-from-upstream))
+ '(meghanada-java-path
+   "/usr/lib/jvm/java-8-openjdk/jre/bin/java")
  '(menu-bar-mode nil)
  '(org-babel-load-languages
    '((emacs-lisp . t)
