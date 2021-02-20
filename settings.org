@@ -687,7 +687,7 @@ put executables in elpy-rpc-venv in path
 ** Ace window
 #+begin_src emacs-lisp
   (use-package ace-window
-    :bind (("M-Q" . ace-window)))
+    :bind (("M-]" . ace-window)))
 #+end_src
 ** Disable Ido
 #+begin_src emacs-lisp
@@ -752,7 +752,6 @@ put executables in elpy-rpc-venv in path
 #+begin_src emacs-lisp
   (use-package smart-mode-line
     :init
-    (winum-mode 1)
     :config
     (sml/setup))
 #+end_src
@@ -761,21 +760,6 @@ put executables in elpy-rpc-venv in path
   (use-package dracula-theme
     :config
     (load-theme 'dracula t))
-#+end_src
-** Winum-mode
-#+begin_src emacs-lisp
-(use-package winum
-              :bind
-              (:map winum-keymap
-                    (("M-0" . winum-select-window-0-or-10)
-                     ("M-1" . winum-select-window-1)
-                     ("M-2" . winum-select-window-2)
-                     ("M-3" . winum-select-window-3)
-                     ("M-4" . winum-select-window-4)
-                     ("M-5" . winum-select-window-5)
-                     ("M-6" . winum-select-window-6)
-                     ("M-7" . winum-select-window-7)
-                     ("M-8" . winum-select-window-8))))
 #+end_src
 * Clipboard manager
 ** Clipmon settings

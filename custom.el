@@ -5,7 +5,7 @@
  ;; If there is more than one, they won't work right.
  '(auto-save-file-name-transforms
    '((".*" "~/.emacs.d/autosave/" t)))
- '(aw-dispatch-when-more-than 1)
+ '(aw-dispatch-when-more-than 2)
  '(backup-directory-alist
    '((".*" . "~/.emacs.d/backup")))
  '(browse-kill-ring-display-duplicates
@@ -192,7 +192,7 @@
  '(tool-bar-mode nil)
  '(tramp-use-ssh-controlmaster-options
    nil)
- '(winum-mode t))
+ '(winum-mode nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
