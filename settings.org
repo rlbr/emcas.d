@@ -689,6 +689,10 @@ put executables in elpy-rpc-venv in path
   (use-package ace-window
     :bind (:map global-map ("C-\\" . ace-window)))
 #+end_src
+** Avy-mode
+#+begin_src emacs-lisp
+  (use-package ace-window
+    :bind (("M-S-j" . avy-goto-symbol-1) ("M-j" . avy-goto-char-timer)))
 #+end_src
 ** Disable Ido
 #+begin_src emacs-lisp
