@@ -687,7 +687,8 @@ put executables in elpy-rpc-venv in path
 ** Ace window
 #+begin_src emacs-lisp
   (use-package ace-window
-    :bind (("M-]" . ace-window)))
+    :bind (:map global-map ("C-\\" . ace-window)))
+#+end_src
 #+end_src
 ** Disable Ido
 #+begin_src emacs-lisp
