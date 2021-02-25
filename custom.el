@@ -67,8 +67,7 @@
  '(ibuffer-show-empty-filter-groups
    nil)
  '(iedit-toggle-key-default
-   "M-]"
-   t)
+   "M-]")
  '(inhibit-startup-screen t)
  '(kill-ring-max 500)
  '(magit-status-sections-hook
