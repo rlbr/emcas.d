@@ -120,7 +120,8 @@
      ("shell" . sh)
      ("bash" . sh)))
  '(package-selected-packages
-   '(meghanada
+   '(disable-mouse
+     meghanada
      pip-requirements
      dired-rsync
      projectile

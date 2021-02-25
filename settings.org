@@ -700,6 +700,12 @@ put executables in elpy-rpc-venv in path
     :config
     (ido-mode -1))
 #+end_src
+** Disable mouse
+#+begin_src emacs-lisp
+  (use-package disable-mouse
+    :config
+    (global-disable-mouse-mode))
+#+end_src
 ** Hippie expand
 #+begin_src emacs-lisp
   (use-package hippie-exp
