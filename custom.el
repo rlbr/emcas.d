@@ -30,6 +30,8 @@
    '("pytest"))
  '(elpy-test-runner
    'elpy-test-pytest-runner)
+ '(enable-recursive-minibuffers
+   t)
  '(explicit-shell-file-name
    "/bin/bash")
  '(find-file-suppress-same-file-warnings
