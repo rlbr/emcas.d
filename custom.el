@@ -69,7 +69,8 @@
  '(ibuffer-show-empty-filter-groups
    nil)
  '(iedit-toggle-key-default
-   "M-]")
+   "M-]"
+   t)
  '(inhibit-startup-screen t)
  '(kill-ring-max 500)
  '(magit-status-sections-hook
@@ -121,7 +122,8 @@
      ("shell" . sh)
      ("bash" . sh)))
  '(package-selected-packages
-   '(disable-mouse
+   '(nginx-mode
+     disable-mouse
      meghanada
      pip-requirements
      dired-rsync
