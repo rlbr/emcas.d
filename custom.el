@@ -69,8 +69,7 @@
  '(ibuffer-show-empty-filter-groups
    nil)
  '(iedit-toggle-key-default
-   "M-]"
-   t)
+   "M-]")
  '(inhibit-startup-screen t)
  '(kill-ring-max 500)
  '(magit-status-sections-hook
@@ -191,7 +190,9 @@
  '(python-check-command "flake8")
  '(reb-re-syntax 'string)
  '(safe-local-variable-values
-   '((project-venv)))
+   '((before-save-hook
+      elpy-yapf-fix-code)
+     (project-venv)))
  '(scroll-bar-mode nil)
  '(sml/theme 'atom-one-dark)
  '(tab-width 4)

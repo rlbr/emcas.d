@@ -2,6 +2,10 @@
 #+begin_src emacs-lisp
   (setq after-settings-load-hooks (list t))
 #+end_src
+* Local vars
+#+begin_src emacs-lisp
+  (advice-add 'risky-local-variable-p :override #'ignore)
+#+end_src
 * Editing
 ** Enable disabled commands
 #+begin_src emacs-lisp
