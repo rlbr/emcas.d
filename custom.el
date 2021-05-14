@@ -122,7 +122,9 @@
      ("shell" . sh)
      ("bash" . sh)))
  '(package-selected-packages
-   '(nginx-mode
+   '(jinja2-mode
+     masm-mode
+     nginx-mode
      disable-mouse
      meghanada
      pip-requirements
