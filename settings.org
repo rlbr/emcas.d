@@ -60,6 +60,12 @@
     :config
     (global-undo-tree-mode))
 #+end_src
+** Company Mode
+   #+begin_src emacs-lisp
+     (use-package company
+       :bind
+       ("TAB" . company-indent-or-complete-common))
+   #+end_src
 * Added functionality
 ** Kill this buffer
 #+begin_src emacs-lisp
@@ -273,9 +279,9 @@ This handy function is a customized ripoff of custom-save-all
 #+end_src
 ** C
 #+begin_src emacs-lisp
-  (use-package format-all
-    :if (executable-find "clang-format")
-    :hook (c-mode . format-all-mode))
+  (use-package cc-mode :hook (c-mode . (lambda ()
+                                         (company-mode)
+                                         (format-all-mode))))
 #+end_src
 ** Docker
 *** Docker
