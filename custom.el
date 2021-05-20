@@ -22,7 +22,7 @@
      default))
  '(delete-by-moving-to-trash t)
  '(dired-listing-switches
-   "-alhv")
+   "-alhv --group-directories-first")
  '(elpy-eldoc-show-current-function
    nil)
  '(elpy-rpc-timeout 4)
