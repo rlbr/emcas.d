@@ -121,7 +121,8 @@
      ("shell" . sh)
      ("bash" . sh)))
  '(package-selected-packages
-   '(jinja2-mode
+   '(google-c-style
+     jinja2-mode
      masm-mode
      nginx-mode
      disable-mouse
@@ -190,7 +191,13 @@
  '(python-check-command "flake8")
  '(reb-re-syntax 'string)
  '(safe-local-variable-values
-   '((before-save-hook
+   '((format-all-formatters
+      ("C" clang-format))
+     (eval
+      c-set-offset
+      'innamespace
+      0)
+     (before-save-hook
       elpy-yapf-fix-code)
      (project-venv)))
  '(scroll-bar-mode nil)

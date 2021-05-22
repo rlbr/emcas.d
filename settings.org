@@ -282,7 +282,9 @@ This handy function is a customized ripoff of custom-save-all
   (use-package cc-mode :hook (c-mode . (lambda ()
                                          (company-mode)
                                          (format-all-mode)
-                                         (format-all-ensure-formatter))))
+                                         (format-all-ensure-formatter)
+                                         (require 'google-c-style)
+                                         (google-set-c-style))))
 #+end_src
 ** Docker
 *** Docker
