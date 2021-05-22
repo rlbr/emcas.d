@@ -281,7 +281,8 @@ This handy function is a customized ripoff of custom-save-all
 #+begin_src emacs-lisp
   (use-package cc-mode :hook (c-mode . (lambda ()
                                          (company-mode)
-                                         (format-all-mode))))
+                                         (format-all-mode)
+                                         (format-all-ensure-formatter))))
 #+end_src
 ** Docker
 *** Docker
