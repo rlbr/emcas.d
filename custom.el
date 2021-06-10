@@ -122,7 +122,8 @@
      ("shell" . sh)
      ("bash" . sh)))
  '(package-selected-packages
-   '(google-c-style
+   '(syslog-mode
+     google-c-style
      jinja2-mode
      masm-mode
      nginx-mode
